@@ -1,3 +1,72 @@
+"""
+rlcompleter_ng
+==============
+
+This module represents an alternative to rlcompleter and rlcompleter2,
+for those who don't like their default behaviour.
+
+There are two main differences between stdlib's rlcompleter and
+rlcompleter_ng:
+
+  - when doing something like a.b.c.<TAB>, rlcompleter prepends a.b.c
+    to all the completions it finds; rlcompleter_ng displays only the
+    attributes, making the screen less cluttered;
+
+  - you can use the <TAB> key both to indent (when the current line is
+    blank) or to complete (when it's not blank);
+
+  - more important, rlcompleter_ng prints the various attributes found
+    in different colors depending on their type.
+
+Unfortunately, the default version of libreadline don't support
+colored completions, so you need to patch it to fully exploid
+rlcompleter_ng capabilities.
+
+You can find the patch here:
+http://codespeak.net/svn/user/antocuni/hack/readline-escape.patch
+
+Alternatively, you can download the Ubuntu package from here (thanks
+to Alexander Schremmer):
+http://antosreadlineforhardy.alexanderweb.de/libreadline5_5.2-3build1pypy_i386.deb
+
+Installation
+------------
+
+Simply put the file rlcompleter_ng.py in a directory which is in your
+PYTHONPATH.
+
+Configuration
+-------------
+
+Since it requires a patched version of libreadline, coloured
+completions are disabled by default.
+
+To customize the configuration of rlcompleter_ng, you need to put a
+file named .rlcompleter_ngrc.py in your home directory.  The file must
+contain a class named ``Config`` inheriting from ``DefaultConfig`` and
+overridding the desired values.
+
+You can find a sample configuration file, which enables colors, here:
+http://codespeak.net/svn/user/antocuni/hack/rlcompleter_ngrc.py
+
+Usage
+-----
+
+From the interactive prompt, import rlcompleter_ng and call setup():
+
+>>> import rlcompleter_ng
+>>> rlcompleter_ng.setup()
+
+Alternatively, you can put these lines in some file that it's
+referenced by the PYTHONSTARTUP environment variable, so that
+completions is always enabled.
+"""
+
+__version__='0.1'
+__author__ ='Antonio Cuni <anto.cuni@gmail.com>'
+__url__='http://codespeak.net/svn/user/antocuni/hack/rlcompleter_ng.py'
+
+
 import readline
 import rlcompleter
 import types
@@ -88,7 +157,7 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
     """
 
     DefaultConfig = DefaultConfig
-    config_filename = '.rlcompleter_ng.py'
+    config_filename = '.rlcompleter_ngrc.py'
 
     def __init__(self, namespace = None, Config=None):
         rlcompleter.Completer.__init__(self, namespace)
@@ -173,3 +242,9 @@ def commonprefix(names, base = ''):
         if not names:
             return ''
     return reduce(commonfunc,names)
+
+
+def setup():
+    completer = Completer()
+    readline.parse_and_bind('tab: complete')
+    readline.set_completer(completer.complete)
