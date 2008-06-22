@@ -25,7 +25,7 @@ rlcompleter_ng capabilities.
 You can find the patch here:
 http://codespeak.net/svn/user/antocuni/hack/readline-escape.patch
 
-Alternatively, you can download the Ubuntu package from here (thanks
+Alternatively, you can download the Ubuntu Hardy i386 package from here (thanks
 to Alexander Schremmer):
 http://antosreadlineforhardy.alexanderweb.de/libreadline5_5.2-3build1pypy_i386.deb
 
