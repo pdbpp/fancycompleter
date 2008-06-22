@@ -1,3 +1,4 @@
+import readline
 import rlcompleter
 import types
 import os.path
@@ -24,6 +25,8 @@ class colors:
 
 class DefaultConfig:
 
+    # WARNING: for this option to work properly, you need to patch readline with this:
+    # http://codespeak.net/svn/user/antocuni/hack/readline-escape.patch
     use_colors = False
     
     color_by_type = {
@@ -90,6 +93,8 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
     def __init__(self, namespace = None, Config=None):
         rlcompleter.Completer.__init__(self, namespace)
         self.config = self.get_config(Config)
+        if self.config.use_colors:
+            readline.parse_and_bind('set dont-escape-ctrl-chars on')
 
     def complete(self, text, state):
         """
