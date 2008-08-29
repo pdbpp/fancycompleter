@@ -245,6 +245,10 @@ def commonprefix(names, base = ''):
 
 
 def setup():
+    import sys
     completer = Completer()
-    readline.parse_and_bind('tab: complete')
+    if sys.platform == "darwin":
+        readline.parse_and_bind('bind ^I rl_complete')
+    else:
+        readline.parse_and_bind('tab: complete')
     readline.set_completer(completer.complete)
