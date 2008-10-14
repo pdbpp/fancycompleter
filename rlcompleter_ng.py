@@ -143,7 +143,7 @@ class ConfigurableClass:
                 execfile(rcfile, mydict)
                 return mydict['Config']()
             except Exception, e:
-                print '** error when importing %s: %s **' % (s, e)
+                print '** error when importing %s: %s **' % (filename, e)
         return self.DefaultConfig()
 
 
