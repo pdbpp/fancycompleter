@@ -207,7 +207,11 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
         for word in dir(object):
             if word[:n] == attr and word != "__builtins__":
                 names.append(word)
-                values.append(getattr(object, word))
+                try:
+                    value = getattr(object, word)
+                except:
+                    value = None
+                values.append(value)
                 
         prefix = commonprefix(names)
         if prefix and prefix != attr:
