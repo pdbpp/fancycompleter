@@ -94,6 +94,8 @@ class colors:
 
 class DefaultConfig:
 
+    consider_getitems = True
+
     # WARNING: for this option to work properly, you need to patch readline with this:
     # http://codespeak.net/svn/user/antocuni/hack/readline-escape.patch
     use_colors = False
@@ -164,6 +166,11 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
         self.config = self.get_config(Config)
         if self.config.use_colors:
             readline.parse_and_bind('set dont-escape-ctrl-chars on')
+        if self.config.consider_getitems:
+            delims = readline.get_completer_delims()
+            delims = delims.replace('[', '')
+            delims = delims.replace(']', '')
+            readline.set_completer_delims(delims)
 
     def complete(self, text, state):
         """
@@ -196,10 +203,9 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
 
     def attr_matches(self, text):
         import re
-        m = re.match(r"(\w+(\.\w+)*)\.(\w*)", text)
-        if not m:
+        expr, attr = text.rsplit('.', 1)
+        if '(' in expr or ')' in expr:  # don't call functions
             return
-        expr, attr = m.group(1, 3)
         object = eval(expr, self.namespace)
         names = []
         values = []

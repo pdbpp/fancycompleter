@@ -28,3 +28,11 @@ def test_complete_global():
     matches = compl.global_matches('fooba')
     assert set(matches) == set(['foobar', 'foobazzz', ' '])
     assert compl.global_matches('foobaz') == ['foobazzz']
+
+def test_complete_with_indexer():
+    compl = Completer({'lst': [1,2,3]}, DefaultConfig)
+    assert compl.attr_matches('lst[0].') == ['lst[0].__']
+    matches = compl.attr_matches('lst[0].__')
+    assert 'lst[0].__abs__' not in matches
+    assert '__abs__' in matches
+    assert compl.attr_matches('lst[0].__abs') == ['lst[0].__abs__']
