@@ -1,0 +1,96 @@
+diff -u readline6-6.0/bind.c readline6-6.0-hacked/bind.c
+--- readline6-6.0/bind.c	2009-01-23 02:15:57.000000000 +0100
++++ readline6-6.0-hacked/bind.c	2009-10-19 11:21:15.796474119 +0200
+@@ -1436,6 +1436,7 @@
+   { "revert-all-at-newline",	&_rl_revert_all_at_newline,	0 },
+   { "show-all-if-ambiguous",	&_rl_complete_show_all,		0 },
+   { "show-all-if-unmodified",	&_rl_complete_show_unmodified,	0 },
++  { "dont-escape-ctrl-chars", 	&rl_dont_escape_ctrl_chars,	0 },
+ #if defined (VISIBLE_STATS)
+   { "visible-stats",		&rl_visible_stats,		0 },
+ #endif /* VISIBLE_STATS */
+diff -u readline6-6.0/complete.c readline6-6.0-hacked/complete.c
+--- readline6-6.0/complete.c	2009-01-22 21:15:14.000000000 +0100
++++ readline6-6.0-hacked/complete.c	2009-10-19 11:25:13.157653382 +0200
+@@ -27,6 +27,7 @@
+ 
+ #include <sys/types.h>
+ #include <fcntl.h>
++#include <ctype.h>
+ #if defined (HAVE_SYS_FILE_H)
+ #  include <sys/file.h>
+ #endif
+@@ -224,6 +225,10 @@
+ 
+ int _rl_page_completions = 1;
+ 
++/* Non-zero means that ctrl chars are not replaced by '^' when
++   printing the list of possible completions */
++int rl_dont_escape_ctrl_chars = 0;
++
+ /* The basic list of characters that signal a break between words for the
+    completer routine.  The contents of this variable is what breaks words
+    in the shell, i.e. " \t\n\"\\'`@$><=" */
+@@ -607,6 +612,7 @@
+      const char *string;
+ {
+   int width, pos;
++  int escape_seq;
+ #if defined (HANDLE_MULTIBYTE)
+   mbstate_t ps;
+   int left, w;
+@@ -617,10 +623,22 @@
+   memset (&ps, 0, sizeof (mbstate_t));
+ #endif
+ 
+-  width = pos = 0;
++  width = pos = escape_seq = 0;
+   while (string[pos])
+     {
+-      if (CTRL_CHAR (string[pos]) || string[pos] == RUBOUT)
++       if (rl_dont_escape_ctrl_chars && string[pos] == '\033')
++         {
++           escape_seq = 1;
++           pos++;
++         }
++       else if (rl_dont_escape_ctrl_chars && escape_seq)
++         {
++           if (isalpha(string[pos]))
++             escape_seq = 0; // escape sequence ended
++           pos++;
++         }
++       else if (CTRL_CHAR (string[pos]) || string[pos] == RUBOUT)
++
+ 	{
+ 	  width += 2;
+ 	  pos++;
+@@ -693,7 +711,7 @@
+   s = to_print + prefix_bytes;
+   while (*s)
+     {
+-      if (CTRL_CHAR (*s))
++      if (!rl_dont_escape_ctrl_chars && CTRL_CHAR (*s))
+         {
+           putc ('^', rl_outstream);
+           putc (UNCTRL (*s), rl_outstream);
+@@ -757,7 +775,8 @@
+   char *s, c, *new_full_pathname, *dn;
+ 
+   extension_char = 0;
+-  printed_len = fnprint (to_print, prefix_bytes);
++  fnprint (to_print, prefix_bytes);
++  printed_len = fnwidth (to_print);
+ 
+ #if defined (VISIBLE_STATS)
+  if (rl_filename_completion_desired && (rl_visible_stats || _rl_complete_mark_directories))
+diff -u readline6-6.0/rlprivate.h readline6-6.0-hacked/rlprivate.h
+--- readline6-6.0/rlprivate.h	2009-01-23 03:56:49.000000000 +0100
++++ readline6-6.0-hacked/rlprivate.h	2009-10-19 11:21:15.796474119 +0200
+@@ -145,6 +145,7 @@
+ 
+ /* complete.c */
+ extern int rl_complete_with_tilde_expansion;
++extern int rl_dont_escape_ctrl_chars;
+ #if defined (VISIBLE_STATS)
+ extern int rl_visible_stats;
+ #endif /* VISIBLE_STATS */

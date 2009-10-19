@@ -23,7 +23,8 @@ colored completions, so you need to patch it to fully exploid
 rlcompleter_ng capabilities.
 
 You can find the patch here:
-http://codespeak.net/svn/user/antocuni/hack/readline-escape.patch
+http://codespeak.net/svn/user/antocuni/hack/readline-escape-5.2.patch
+http://codespeak.net/svn/user/antocuni/hack/readline-escape-6.0.patch
 
 Alternatively, you can download the Ubuntu Hardy i386 package from here (thanks
 to Alexander Schremmer):
