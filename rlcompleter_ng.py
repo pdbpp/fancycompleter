@@ -227,6 +227,8 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
         matches = [self.color_for_obj(i, name, value)
                    for i, name, value
                    in izip(count(), names, values)]
+        # we add a space at the end to prevent the automatic completion of the
+        # common prefix, which is the ANSI ESCAPE sequence
         return matches + [' ']
 
     def color_for_obj(self, i, name, value):

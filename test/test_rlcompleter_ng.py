@@ -1,12 +1,12 @@
 from rlcompleter_ng import DefaultConfig, Completer, setcolor
 
 def test_complete_attribute():
-    compl = Completer({'a': 42}, DefaultConfig)
+    compl = Completer({'a': None}, DefaultConfig)
     assert compl.attr_matches('a.') == ['a.__']
     matches = compl.attr_matches('a.__')
-    assert 'a.__abs__' not in matches
-    assert '__abs__' in matches
-    assert compl.attr_matches('a.__abs') == ['a.__abs__']
+    assert 'a.__class__' not in matches
+    assert '__class__' in matches
+    assert compl.attr_matches('a.__class') == ['a.__class__']
 
 def test_complete_attribute_colored():
     class ColorConfig(DefaultConfig):
@@ -30,9 +30,9 @@ def test_complete_global():
     assert compl.global_matches('foobaz') == ['foobazzz']
 
 def test_complete_with_indexer():
-    compl = Completer({'lst': [1,2,3]}, DefaultConfig)
+    compl = Completer({'lst': [None,2,3]}, DefaultConfig)
     assert compl.attr_matches('lst[0].') == ['lst[0].__']
     matches = compl.attr_matches('lst[0].__')
-    assert 'lst[0].__abs__' not in matches
-    assert '__abs__' in matches
-    assert compl.attr_matches('lst[0].__abs') == ['lst[0].__abs__']
+    assert 'lst[0].__class__' not in matches
+    assert '__class__' in matches
+    assert compl.attr_matches('lst[0].__class') == ['lst[0].__class__']
