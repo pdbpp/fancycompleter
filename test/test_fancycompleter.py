@@ -1,4 +1,4 @@
-from rlcompleter_ng import DefaultConfig, Completer, setcolor
+from fancycompleter import DefaultConfig, Completer, setcolor
 
 def test_complete_attribute():
     compl = Completer({'a': None}, DefaultConfig)
