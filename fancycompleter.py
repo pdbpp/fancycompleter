@@ -61,11 +61,134 @@ __version__='0.1'
 __author__ ='Antonio Cuni <anto.cuni@gmail.com>'
 __url__='http://bitbucket.org/antocuni/fancycompleter'
 
-import readline
 import rlcompleter
 import types
 import os.path
 from itertools import izip, count
+
+def find_readline():
+    """
+    Return the best "readline" module we can find.
+
+    If pyrepl is installed and has support for colored completions, return it.
+    Else, monkeypatch pyrepl to add support for colored completions.
+    If pyrepl is not installed, just use the standard readline.
+    """
+    try:
+        # prefer pyrepl
+        import pyrepl.completing_reader
+        import pyrepl.unix_console
+        import pyrepl.readline
+    except ImportError:
+        # if not found, try readline
+        import readline
+        return readline, False
+    #
+    if hasattr(pyrepl.completing_reader, 'stripcolor'):
+        # moder version of pyrepl, no monkeypatch needed
+        return pyrepl.readline, True
+    #
+    # -----------------------------------------------------------------------------
+    # monkeypatch pyrepl to support colors
+    # this code will go away as soon as a new version of pyrepl is released
+    #
+    # inside class pyrepl.unix_console.UnixConsole
+    class UnixConsole:
+        # we put it inside a class so that __* names are mangled correctly
+        def __write_changed_line(self, y, oldline, newline, px):
+            # this is frustrating; there's no reason to test (say)
+            # self.dch1 inside the loop -- but alternative ways of
+            # structuring this function are equally painful (I'm trying to
+            # avoid writing code generators these days...)
+            x = 0
+            minlen = min(len(oldline), len(newline))
+            #
+            # reuse the oldline as much as possible, but stop as soon as we
+            # encounter an ESCAPE, because it might be the start of an escape
+            # sequene
+            while x < minlen and oldline[x] == newline[x] and newline[x] != '\x1b':
+                x += 1
+            if oldline[x:] == newline[x+1:] and self.ich1:
+                if ( y == self.__posxy[1] and x > self.__posxy[0]
+                     and oldline[px:x] == newline[px+1:x+1] ):
+                    x = px
+                self.__move(x, y)
+                self.__write_code(self.ich1)
+                self.__write(newline[x])
+                self.__posxy = x + 1, y
+            elif x < minlen and oldline[x + 1:] == newline[x + 1:]:
+                self.__move(x, y)
+                self.__write(newline[x])
+                self.__posxy = x + 1, y
+            elif (self.dch1 and self.ich1 and len(newline) == self.width
+                  and x < len(newline) - 2
+                  and newline[x+1:-1] == oldline[x:-2]):
+                self.__hide_cursor()
+                self.__move(self.width - 2, y)
+                self.__posxy = self.width - 2, y
+                self.__write_code(self.dch1)
+                self.__move(x, y)
+                self.__write_code(self.ich1)
+                self.__write(newline[x])
+                self.__posxy = x + 1, y
+            else:
+                self.__hide_cursor()
+                self.__move(x, y)
+                if len(oldline) > len(newline):
+                    self.__write_code(self._el)
+                self.__write(newline[x:])
+                self.__posxy = len(newline), y
+    pyrepl.unix_console.UnixConsole._UnixConsole__write_changed_line = \
+        UnixConsole._UnixConsole__write_changed_line.im_func
+    #
+    import re
+    def stripcolor(s):
+        return stripcolor.regexp.sub('', s)
+    stripcolor.regexp = re.compile(r"\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[m|K]")
+
+    def real_len(s):
+        return len(stripcolor(s))
+
+    def left_align(s, maxlen):
+        stripped = stripcolor(s)
+        if len(stripped) > maxlen:
+            # too bad, we remove the color
+            return stripped[:maxlen]
+        padding = maxlen - len(stripped)
+        return s + ' '*padding
+
+    def build_menu(cons, wordlist, start, use_brackets=False):
+        if use_brackets:
+            item = "[ %s ]"
+            padding = 4
+        else:
+            item = "%s  "
+            padding = 2
+        maxlen = min(max(map(real_len, wordlist)), cons.width - padding)
+        cols = cons.width / (maxlen + padding)
+        rows = (len(wordlist) - 1)/cols + 1
+        menu = []
+        i = start
+        for r in range(rows):
+            row = []
+            for col in range(cols):
+                row.append(item % left_align(wordlist[i], maxlen))
+                i += 1
+                if i >= len(wordlist):
+                    break
+            menu.append( ''.join(row) )
+            if i >= len(wordlist):
+                i = 0
+                break
+            if r + 5 > cons.height:
+                menu.append("   %d more... "%(len(wordlist) - i))
+                break
+        return menu, i    
+    #
+    pyrepl.completing_reader.build_menu = build_menu
+    return pyrepl.readline, True
+
+readline, SUPPORT_COLORS = find_readline()
 
 class colors:
     black = '30'
@@ -92,7 +215,7 @@ class DefaultConfig:
 
     # WARNING: for this option to work properly, you need to patch readline with this:
     # http://codespeak.net/svn/user/antocuni/hack/readline-escape.patch
-    use_colors = False
+    use_colors = SUPPORT_COLORS
     
     color_by_type = {
         types.BuiltinMethodType: colors.turquoise,
