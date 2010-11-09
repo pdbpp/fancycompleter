@@ -291,6 +291,9 @@ def has_leopard_libedit():
     return False
     
 def setup():
+    """
+    Install fancycompleter as the default completer for readline.
+    """
     completer = Completer()
     readline = completer.config.readline
     if has_leopard_libedit():
@@ -309,6 +312,25 @@ def interact_pyrepl():
     run_multiline_interactive_console()
 
 def interact():
+    """
+    Main entry point for fancycompleter: run an interactive Python session
+    after installing fancycompleter.
+
+    This function is supposed to be called at the end of PYTHONSTARTUP:
+
+      - if we are using pyrepl: install fancycompleter, run pyrepl multiline
+        prompt, and sys.exit().  The standard python prompt will never be
+        reached
+
+      - if we are not using pyrepl: install fancycompleter and return.  The
+        execution will continue as normal, and the standard python prompt will
+        be displayed.
+
+    This is necessary because there is no way to tell the standard python
+    prompt to use the readline provided by pyrepl instead of the builtin one.
+
+    By default, pyrepl is preferred and automatically used if found.
+    """
     import sys
     completer = setup()
     if completer.config.using_pyrepl:
