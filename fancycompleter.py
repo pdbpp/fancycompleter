@@ -88,11 +88,11 @@ class colors:
 class DefaultConfig:
 
     consider_getitems = True
-
-    readline = None # set by setup()
     prefer_pyrepl = True
-    use_colors = 'auto'
-    
+    use_colors = 'auto'  
+    readline = None # set by setup()
+    using_pyrepl = False # overwritten by find_pyrepl
+  
     color_by_type = {
         types.BuiltinMethodType: colors.turquoise,
         types.BuiltinMethodType: colors.turquoise,
@@ -123,6 +123,7 @@ class DefaultConfig:
             import pyrepl.completing_reader
         except ImportError:
             return None
+        self.using_pyrepl = True
         if hasattr(pyrepl.completing_reader, 'stripcolor'):
             # modern version of pyrepl
             pyrepl.completing_reader.USE_BRACKETS = False
@@ -297,3 +298,19 @@ def setup():
     else:
         readline.parse_and_bind('tab: complete')
     readline.set_completer(completer.complete)
+    return completer
+
+def interact_pyrepl():
+    import pyrepl
+    import os, sys
+    from pyrepl import readline
+    from pyrepl.simple_interact import run_multiline_interactive_console
+    sys.modules['readline'] = readline
+    run_multiline_interactive_console()
+
+def interact():
+    import sys
+    completer = setup()
+    if completer.config.using_pyrepl:
+        interact_pyrepl()
+        sys.exit()
