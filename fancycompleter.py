@@ -66,32 +66,6 @@ import types
 import os.path
 from itertools import izip, count
 
-def find_readline():
-    """
-    Return the best "readline" module we can find.
-
-    If pyrepl is installed and has support for colored completions, return it.
-    Else, monkeypatch pyrepl to add support for colored completions.
-    If pyrepl is not installed, just use the standard readline.
-    """
-    try:
-        # prefer pyrepl
-        import pyrepl.readline
-        import pyrepl.completing_reader
-    except ImportError:
-        # if not found, try readline
-        import readline
-        return readline, False
-    #
-    if hasattr(pyrepl.completing_reader, 'stripcolor'):
-        # modern version of pyrepl
-        pyrepl.completing_reader.USE_BRACKETS = False
-        return pyrepl.readline, True
-    else:
-        return pyrepl.readline, False
-
-readline, SUPPORT_COLORS = find_readline()
-
 class colors:
     black = '30'
     darkred = '31'
@@ -115,9 +89,9 @@ class DefaultConfig:
 
     consider_getitems = True
 
-    # WARNING: for this option to work properly, you need to patch readline with this:
-    # http://codespeak.net/svn/user/antocuni/hack/readline-escape.patch
-    use_colors = SUPPORT_COLORS
+    readline = None # set by setup()
+    prefer_pyrepl = True
+    use_colors = 'auto'
     
     color_by_type = {
         types.BuiltinMethodType: colors.turquoise,
@@ -143,6 +117,31 @@ class DefaultConfig:
         bool: colors.yellow,
         }
 
+    def find_pyrepl(self):
+        try:
+            import pyrepl.readline
+            import pyrepl.completing_reader
+        except ImportError:
+            return None
+        if hasattr(pyrepl.completing_reader, 'stripcolor'):
+            # modern version of pyrepl
+            pyrepl.completing_reader.USE_BRACKETS = False
+            return pyrepl.readline, True
+        else:
+            return pyrepl.readline, False
+
+    def find_best_readline(self):
+        if self.prefer_pyrepl:
+            result = self.find_pyrepl()
+            if result:
+                return result
+        import readline
+        return readline, False # by default readline does not support colors
+
+    def setup(self):
+        self.readline, supports_color = self.find_best_readline()
+        if self.use_colors == 'auto':
+            self.use_colors = supports_color
 
 def setcolor(s, color):
     return '\x1b[%sm%s\x1b[00m' % (color, s)
@@ -183,6 +182,8 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
     def __init__(self, namespace = None, Config=None):
         rlcompleter.Completer.__init__(self, namespace)
         self.config = self.get_config(Config)
+        self.config.setup()
+        readline = self.config.readline
         if self.config.use_colors:
             readline.parse_and_bind('set dont-escape-ctrl-chars on')
         if self.config.consider_getitems:
@@ -290,6 +291,7 @@ def has_leopard_libedit():
     
 def setup():
     completer = Completer()
+    readline = completer.config.readline
     if has_leopard_libedit():
         readline.parse_and_bind("bind ^I rl_complete")
     else:
