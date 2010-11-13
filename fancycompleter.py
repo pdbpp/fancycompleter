@@ -126,7 +126,6 @@ class DefaultConfig:
         self.using_pyrepl = True
         if hasattr(pyrepl.completing_reader, 'stripcolor'):
             # modern version of pyrepl
-            pyrepl.completing_reader.USE_BRACKETS = False
             return pyrepl.readline, True
         else:
             return pyrepl.readline, False
