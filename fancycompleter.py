@@ -66,7 +66,7 @@ import types
 import os.path
 from itertools import izip, count
 
-class colors:
+class Color:
     black = '30'
     darkred = '31'
     darkgreen = '32'    
@@ -84,6 +84,14 @@ class colors:
     turquoise = '36;01'
     white = '37;01'
 
+    @classmethod
+    def set(cls, color, string):
+        try:
+            color = getattr(cls, color)
+        except AttributeError:
+            pass
+        return '\x1b[%sm%s\x1b[00m' % (color, string)
+
 
 class DefaultConfig:
 
@@ -94,27 +102,27 @@ class DefaultConfig:
     using_pyrepl = False # overwritten by find_pyrepl
   
     color_by_type = {
-        types.BuiltinMethodType: colors.turquoise,
-        types.BuiltinMethodType: colors.turquoise,
-        types.MethodType: colors.turquoise,
-        type((42).__add__): colors.turquoise,
-        type(int.__add__): colors.turquoise,
-        type(str.replace): colors.turquoise,
+        types.BuiltinMethodType: Color.turquoise,
+        types.BuiltinMethodType: Color.turquoise,
+        types.MethodType: Color.turquoise,
+        type((42).__add__): Color.turquoise,
+        type(int.__add__): Color.turquoise,
+        type(str.replace): Color.turquoise,
 
-        types.FunctionType: colors.blue,
-        types.BuiltinFunctionType: colors.blue,
+        types.FunctionType: Color.blue,
+        types.BuiltinFunctionType: Color.blue,
         
-        types.ClassType: colors.fuchsia,
-        type: colors.fuchsia,
+        types.ClassType: Color.fuchsia,
+        type: Color.fuchsia,
         
-        types.ModuleType: colors.teal,
-        types.NoneType: colors.lightgray,
-        str: colors.green,
-        unicode: colors.green,
-        int: colors.yellow,
-        float: colors.yellow,
-        complex: colors.yellow,
-        bool: colors.yellow,
+        types.ModuleType: Color.teal,
+        types.NoneType: Color.lightgray,
+        str: Color.green,
+        unicode: Color.green,
+        int: Color.yellow,
+        float: Color.yellow,
+        complex: Color.yellow,
+        bool: Color.yellow,
         }
 
     def find_pyrepl(self):
@@ -142,9 +150,6 @@ class DefaultConfig:
         self.readline, supports_color = self.find_best_readline()
         if self.use_colors == 'auto':
             self.use_colors = supports_color
-
-def setcolor(s, color):
-    return '\x1b[%sm%s\x1b[00m' % (color, s)
 
 
 class ConfigurableClass:
@@ -261,7 +266,7 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
         color = self.config.color_by_type.get(t, '00')
         # hack hack hack
         # prepend a fake escape sequence, so that readline can sort the matches correctly
-        return '\x1b[%03d;00m' % i + setcolor(name, color)
+        return '\x1b[%03d;00m' % i + Color.set(color, name)
 
 
 # stolen from rlcompleter2
