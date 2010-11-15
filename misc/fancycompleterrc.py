@@ -1,5 +1,5 @@
-from rlcompleter_ng import DefaultConfig
+from fancycompleter import DefaultConfig
 
 class Config(DefaultConfig):
-    prefer_pyrepl = False
-    use_colors = True # need a patched libreadline
+    prefer_pyrepl = False # force fancycompleter to use the standard readline
+    use_colors = True     # you need a patched libreadline for this
