@@ -15,7 +15,7 @@ rlcompleter_ module.
 Its best feature is that the completions are displayed in different colors,
 depending on their type:
 
-.. image:: http://bitbucket.org/antocuni/fancycompleter/raw/tid/screenshot.png
+.. image:: http://bitbucket.org/antocuni/fancycompleter/raw/5bf506e05ce7/screenshot.png
 
 In the image above, strings are shown in green, functions in blue, integers
 and boolean in yellows, ``None`` in gray, types and classes in
@@ -156,4 +156,4 @@ prompt is based on pyrepl anyway.
 .. _`GNU readline`: http://tiswww.case.edu/php/chet/readline/rltop.html
 .. _pyrepl: http://codespeak.net/pyrepl/
 .. _`SVN repository`: http://codespeak.net/svn/pyrepl/trunk/pyrepl/
-.. -`code.InteractiveConsole`: http://docs.python.org/library/code.html#code.InteractiveConsole
+.. _`code.InteractiveConsole`: http://docs.python.org/library/code.html#code.InteractiveConsole
