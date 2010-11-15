@@ -341,6 +341,8 @@ def interact():
     """
     import sys
     completer = setup()
-    if completer.config.using_pyrepl:
+    if completer.config.using_pyrepl and '__pypy__' not in sys.builtin_module_names:
+        # if we are on PyPy, we don't need to run a "fake" interpeter, as the
+        # standard one is fake enough :-)
         interact_pyrepl()
         sys.exit()
