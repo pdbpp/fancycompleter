@@ -1,4 +1,4 @@
-from fancycompleter import DefaultConfig, Completer, setcolor
+from fancycompleter import DefaultConfig, Completer, Color
 
 class ConfigForTest(DefaultConfig):
     use_colors = False
@@ -19,7 +19,7 @@ def test_complete_attribute_colored():
     compl = Completer({'a': 42}, ColorConfig)
     matches = compl.attr_matches('a.__')
     for match in matches:
-        if setcolor('__class__', '31') in match:
+        if Color.set('31', '__class__') in match:
             break
     else:
         assert False
