@@ -15,7 +15,7 @@ rlcompleter_ module.
 Its best feature is that the completions are displayed in different colors,
 depending on their type:
 
-.. image:: raw/5bf506e05ce7/screenshot.png
+.. image:: http://bitbucket.org/antocuni/fancycompleter/raw/5bf506e05ce7/screenshot.png
 
 In the image above, strings are shown in green, functions in blue, integers
 and boolean in yellows, ``None`` in gray, types and classes in
@@ -115,11 +115,11 @@ it uses colors only with ``pyrepl``: you can do it by placing a custom config
 file in ``~/.fancycompleterrc.py``.  An example config file is `here`_ (remind
 that you need to put a dot in front of the filename!).
 
-.. _`readline-5.2`: src/tip/misc/readline-escape-5.2.patch
-.. _`readline-6.0`: src/tip/misc/readline-escape-6.0.patch
-.. _`32-bit`: src/tip/misc/libreadline.so.6-32bit
-.. _`64-bit`: src/tip/misc/libreadline.so.6-64bit
-.. _here: src/tip/misc/fancycompleterrc.py
+.. _`readline-5.2`: http://bitbucket.org/antocuni/fancycompleter/src/tip/misc/readline-escape-5.2.patch
+.. _`readline-6.0`: http://bitbucket.org/antocuni/fancycompleter/src/tip/misc/readline-escape-6.0.patch
+.. _`32-bit`: http://bitbucket.org/antocuni/fancycompleter/src/tip/misc/libreadline.so.6-32bit
+.. _`64-bit`: http://bitbucket.org/antocuni/fancycompleter/src/tip/misc/libreadline.so.6-64bit
+.. _here: http://bitbucket.org/antocuni/fancycompleter/src/tip/misc/fancycompleterrc.py
 
 What is really going on?
 -------------------------
