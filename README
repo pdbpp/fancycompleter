@@ -60,7 +60,7 @@ file (identified by the `PYTHONSTARTUP`_ environment variable).
 
 **Note**: depending on your particular system, ``interact`` might need to play
 dirty tricks in order to display colors, although everything should "just
-works™".  In particular, the call to ``interact`` should be the last line in
+work™".  In particular, the call to ``interact`` should be the last line in
 the startup file, else the next lines might not be executed. See section `What
 is really going on?`_ for details.
 
