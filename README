@@ -2,7 +2,7 @@
 .. -*- restructuredtext -*-
 
 
-fancycompleter, colorful python TAB completion
+fancycompleter: colorful Python TAB completion
 ===============================================
 
 What is is?
@@ -120,6 +120,16 @@ that you need to put a dot in front of the filename!).
 .. _`32-bit`: http://bitbucket.org/antocuni/fancycompleter/src/tip/misc/libreadline.so.6-32bit
 .. _`64-bit`: http://bitbucket.org/antocuni/fancycompleter/src/tip/misc/libreadline.so.6-64bit
 .. _here: http://bitbucket.org/antocuni/fancycompleter/src/tip/misc/fancycompleterrc.py
+
+
+Customization
+--------------
+
+To customize the configuration of fancycompleter, you need to put a
+file named ``.fancycompleterrc.py`` in your home directory.  The file must
+contain a class named ``Config`` inheriting from ``DefaultConfig`` and
+overridding the desired values.
+
 
 What is really going on?
 -------------------------
