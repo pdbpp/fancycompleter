@@ -166,7 +166,9 @@ while pyrepl is written in pure Python, it sill makes use of unix specific
 syscalls to control the terminal.
 
 If you really want it, you might try to port pyrepl on Windows by writing the
-equivalent of `unix_console.py`_.
+equivalent of `unix_console.py`_, or you can try to use pyreadline_ and adapt
+it to support colors in completions.  If you manage to make it working, I'd
+like to know, please :-).
 
 .. _rlcompleter: http://docs.python.org/library/rlcompleter.html
 .. _PYTHONSTARTUP: http://docs.python.org/using/cmdline.html#envvar-PYTHONSTARTUP
@@ -176,3 +178,4 @@ equivalent of `unix_console.py`_.
 .. _`SVN repository`: http://codespeak.net/svn/pyrepl/trunk/pyrepl/
 .. _`code.InteractiveConsole`: http://docs.python.org/library/code.html#code.InteractiveConsole
 .. _`unix_console.py`: http://codespeak.net/svn/pyrepl/trunk/pyrepl/pyrepl/unix_console.py
+.. _pyreadline: https://code.launchpad.net/~pyreadline/
