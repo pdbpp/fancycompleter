@@ -230,14 +230,14 @@ def commonprefix(names, base = ''):
     return reduce(commonfunc,names)
 
 
-def has_leopard_libedit():
+def has_leopard_libedit(config):
     import commands
     import sys
     # Detect if we are using Leopard's libedit.
     # Taken from IPython's rlineimpl.py.
-    if sys.platform != 'darwin':
+    if config.using_pyrepl or sys.platform != 'darwin':
         return False
-    cmd =  "otool -L %s | grep libedit" % readline.__file__
+    cmd =  "otool -L %s | grep libedit" % config.readline.__file__
     (status, result) = commands.getstatusoutput(cmd)
     if status == 0 and len(result) > 0:
         return True
@@ -249,7 +249,7 @@ def setup():
     """
     completer = Completer()
     readline = completer.config.readline
-    if has_leopard_libedit():
+    if has_leopard_libedit(completer.config):
         readline.parse_and_bind("bind ^I rl_complete")
     else:
         readline.parse_and_bind('tab: complete')
