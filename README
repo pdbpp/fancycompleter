@@ -26,7 +26,7 @@ Other features
 
 * To save space on screen, ``fancycompleter`` only shows the characters "after
   the dot".  By contrast, in the example above ``rlcompleter`` shows
-  everything prepended by ``sys.``.
+  everything prepended by "``sys.``".
 
 * If we press ``<TAB>`` at the beginning of the line, a real tab character is
   inserted, instead of trying to complete.  This is useful when typing
@@ -158,6 +158,15 @@ needed and thus ``interact()`` will simply returns, letting the built-in
 prompt to show up.  The same is true if we are running PyPy, as its built-in
 prompt is based on pyrepl anyway.
 
+Does it work on Windows
+-----------------------
+
+Unfortunately, not.  On Windows, ``readline`` is not available at all, and
+while pyrepl is written in pure Python, it sill makes use of unix specific
+syscalls to control the terminal.
+
+If you really want it, you might try to port pyrepl on Windows by writing the
+equivalent of `unix_console.py`_.
 
 .. _rlcompleter: http://docs.python.org/library/rlcompleter.html
 .. _PYTHONSTARTUP: http://docs.python.org/using/cmdline.html#envvar-PYTHONSTARTUP
@@ -166,3 +175,4 @@ prompt is based on pyrepl anyway.
 .. _pyrepl: http://codespeak.net/pyrepl/
 .. _`SVN repository`: http://codespeak.net/svn/pyrepl/trunk/pyrepl/
 .. _`code.InteractiveConsole`: http://docs.python.org/library/code.html#code.InteractiveConsole
+.. _`unix_console.py`: http://codespeak.net/svn/pyrepl/trunk/pyrepl/pyrepl/unix_console.py
