@@ -158,8 +158,8 @@ needed and thus ``interact()`` will simply returns, letting the built-in
 prompt to show up.  The same is true if we are running PyPy, as its built-in
 prompt is based on pyrepl anyway.
 
-Does it work on Windows
------------------------
+Does it work on Windows?
+------------------------
 
 Unfortunately, not.  On Windows, ``readline`` is not available at all, and
 while pyrepl is written in pure Python, it sill makes use of unix specific
