@@ -6,7 +6,7 @@ long_description = open(readme).read()
 
 setup(
     name='fancycompleter',
-    version='0.1',
+    version='0.2',
     author='Antonio Cuni',
     author_email='anto.cuni@gmail.com',
     py_modules=['fancycompleter'],
@@ -24,5 +24,6 @@ setup(
         "Operating System :: POSIX",
         "Topic :: Utilities",
         ],
+    install_requires=["pyrepl>=0.8.2"],
 )
 

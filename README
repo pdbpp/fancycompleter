@@ -70,6 +70,11 @@ How do I get colors?
 If you are using PyPy_, you can stop reading now, as ``fancycompleter`` will
 work out of the box.
 
+If you are on CPython and you installed ``fancycompleter`` with ``pip`` or
+``easy_install``, they automatically installed ``pyrepl`` as a requirement,
+and you should also get colors out of the box.  If for some reason you don't
+want to use ``pyrepl``, you should keep on reading.
+
 By default, in CPython line input and TAB completion are handled by `GNU
 readline`_ (at least on Linux).  However, ``readline`` explicitly strips
 escape sequences from the completions, so completions with colors are not
@@ -81,10 +86,8 @@ There are two ways to solve it:
 
   * use a patched version of ``readline`` to allow colors
 
-By default, ``fancycompleter`` tries to use ``pyrepl`` if it finds it.
-However, to get colors you need a very recent version: at the moment of
-writing the latest official release is 0.8.1, but it's not recent enough, so
-you need to install it from the `SVN repository`_.
+By default, ``fancycompleter`` tries to use ``pyrepl`` if it finds it.  To get
+colors you need a recent version, >= 0.8.2.
 
 I really want to use readline
 ------------------------------

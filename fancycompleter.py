@@ -2,7 +2,7 @@
 fancycompleter: colorful TAB completion for Python prompt
 """
 
-__version__='0.1'
+__version__='0.2'
 __author__ ='Antonio Cuni <anto.cuni@gmail.com>'
 __url__='http://bitbucket.org/antocuni/fancycompleter'
 
