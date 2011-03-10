@@ -134,6 +134,12 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
         self.config = self.get_config(Config)
         self.config.setup()
         readline = self.config.readline
+        if hasattr(readline, '_setup'):
+            # this is needed to offer pyrepl a better chance to patch
+            # raw_input. Usually, it does at import time, but is we are under
+            # pytest with output captured, at import time we don't have a
+            # terminal and thus the raw_input hook is not installed
+            readline._setup()
         if self.config.use_colors:
             readline.parse_and_bind('set dont-escape-ctrl-chars on')
         if self.config.consider_getitems:
