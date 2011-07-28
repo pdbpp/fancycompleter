@@ -270,7 +270,22 @@ def interact_pyrepl():
     sys.modules['readline'] = readline
     run_multiline_interactive_console()
 
-def interact():
+def setup_history(completer, persist_history):
+    import atexit
+    readline = completer.config.readline
+    #
+    if isinstance(persist_history, basestring):
+        filename = persist_history
+    else:
+        filename = '~/.history.py'
+    filename = os.path.expanduser(filename)
+    if os.path.isfile(filename):
+        readline.read_history_file(filename)
+    def save_history():
+        readline.write_history_file(filename)
+    atexit.register(save_history)
+
+def interact(persist_history=None):
     """
     Main entry point for fancycompleter: run an interactive Python session
     after installing fancycompleter.
@@ -292,6 +307,8 @@ def interact():
     """
     import sys
     completer = setup()
+    if persist_history:
+        setup_history(completer, persist_history)
     if completer.config.using_pyrepl and '__pypy__' not in sys.builtin_module_names:
         # if we are on PyPy, we don't need to run a "fake" interpeter, as the
         # standard one is fake enough :-)
