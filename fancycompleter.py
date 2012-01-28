@@ -2,14 +2,33 @@
 fancycompleter: colorful TAB completion for Python prompt
 """
 
-__version__='0.2'
+__version__='0.3'
 __author__ ='Antonio Cuni <anto.cuni@gmail.com>'
 __url__='http://bitbucket.org/antocuni/fancycompleter'
 
 import rlcompleter
 import types
 import os.path
-from itertools import izip, count
+from itertools import count
+
+# python3 compatibility
+# ---------------------
+try:
+    from itertools import izip
+except ImportError:
+    izip = zip
+
+try:
+    from types import ClassType
+except ImportError:
+    ClassType = type
+
+try:
+    unicode
+except NameError:
+    unicode = str
+
+# ----------------------
 
 class Color:
     black = '30'
@@ -37,7 +56,6 @@ class Color:
             pass
         return '\x1b[%sm%s\x1b[00m' % (color, string)
 
-
 class DefaultConfig:
 
     consider_getitems = True
@@ -57,11 +75,11 @@ class DefaultConfig:
         types.FunctionType: Color.blue,
         types.BuiltinFunctionType: Color.blue,
         
-        types.ClassType: Color.fuchsia,
+        ClassType: Color.fuchsia,
         type: Color.fuchsia,
         
         types.ModuleType: Color.teal,
-        types.NoneType: Color.lightgray,
+        type(None): Color.lightgray,
         str: Color.green,
         unicode: Color.green,
         int: Color.yellow,
@@ -112,8 +130,8 @@ class ConfigurableClass:
             try:
                 execfile(rcfile, mydict)
                 return mydict['Config']()
-            except Exception, e:
-                print '** error when importing %s: %s **' % (filename, e)
+            except Exception as e:
+                print('** error when importing %s: %s **' % (filename, e))
         return self.DefaultConfig()
 
 
@@ -237,7 +255,11 @@ def commonprefix(names, base = ''):
 
 
 def has_leopard_libedit(config):
-    import commands
+    try:
+        import commands
+    except ImportError:
+        # python3? just return False for now
+        return False
     import sys
     # Detect if we are using Leopard's libedit.
     # Taken from IPython's rlineimpl.py.
@@ -274,7 +296,7 @@ def setup_history(completer, persist_history):
     import atexit
     readline = completer.config.readline
     #
-    if isinstance(persist_history, basestring):
+    if isinstance(persist_history, (str, unicode)):
         filename = persist_history
     else:
         filename = '~/.history.py'
