@@ -115,6 +115,11 @@ class DefaultConfig:
         if self.use_colors == 'auto':
             self.use_colors = supports_color
 
+def my_execfile(filename, mydict):
+    with open(filename) as f:
+        code = compile(f.read(), filename, 'exec')
+        exec(code, mydict)
+
 
 class ConfigurableClass:
     DefaultConfig = None
@@ -129,7 +134,7 @@ class ConfigurableClass:
         if os.path.exists(rcfile):
             mydict = {}
             try:
-                execfile(rcfile, mydict)
+                my_execfile(rcfile, mydict)
                 return mydict['Config']()
             except Exception as e:
                 print('** error when importing %s: %s **' % (filename, e))
