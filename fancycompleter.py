@@ -10,6 +10,7 @@ import rlcompleter
 import types
 import os.path
 from itertools import count
+from functools import reduce
 
 # python3 compatibility
 # ---------------------
@@ -175,7 +176,7 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
             return ['\t',None][state]
         else:
             return rlcompleter.Completer.complete(self,text,state)
-
+            
     def _callable_postfix(self, val, word):
         # disable automatic insertion of '(' for global callables: this method exists only in Python 2.6+
         return word
