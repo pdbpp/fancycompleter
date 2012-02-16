@@ -21,6 +21,9 @@ In the image above, strings are shown in green, functions in blue, integers
 and boolean in yellows, ``None`` in gray, types and classes in
 fuchsia. Everything else is plain white.
 
+``fancycompleter`` is compatible with Python 3. However, by default colors
+don't work on Python 3, see the section `How do I get colors?`_ for details.
+
 Other features
 --------------
 
@@ -88,6 +91,10 @@ There are two ways to solve it:
 
 By default, ``fancycompleter`` tries to use ``pyrepl`` if it finds it.  To get
 colors you need a recent version, >= 0.8.2.
+
+If you are using Python 3, ``pyrepl`` does not work, and thus is not
+installed. Your only option to get colors is to use a patched ``readline``, as
+explained below.
 
 I really want to use readline
 ------------------------------
