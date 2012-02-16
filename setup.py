@@ -1,8 +1,15 @@
+import sys
 import os.path
 from setuptools import setup, find_packages
 
 readme = os.path.join(os.path.dirname(__file__), 'README')
 long_description = open(readme).read()
+
+if sys.version_info < (3,):
+    install_requires=["pyrepl>=0.8.2"]
+else:
+    install_requires=[]
+
 
 setup(
     name='fancycompleter',
@@ -24,5 +31,5 @@ setup(
         "Operating System :: POSIX",
         "Topic :: Utilities",
         ],
-    install_requires=["pyrepl>=0.8.2"],
+    install_requires=install_requires,
 )
