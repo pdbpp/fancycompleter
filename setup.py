@@ -13,7 +13,7 @@ else:
 
 setup(
     name='fancycompleter',
-    version='0.3',
+    version='0.4',
     author='Antonio Cuni',
     author_email='anto.cuni@gmail.com',
     py_modules=['fancycompleter'],

@@ -3,7 +3,7 @@ fancycompleter: colorful TAB completion for Python prompt
 """
 from __future__ import with_statement
 
-__version__='0.3'
+__version__='0.4'
 __author__ ='Antonio Cuni <anto.cuni@gmail.com>'
 __url__='http://bitbucket.org/antocuni/fancycompleter'
 
@@ -140,7 +140,7 @@ class ConfigurableClass:
             try:
                 my_execfile(rcfile, mydict)
                 return mydict['Config']()
-            except Exception, e:
+            except Exception as e:
                 print('** error when importing %s: %s **' % (filename, e))
         return self.DefaultConfig()
 
