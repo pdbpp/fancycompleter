@@ -8,6 +8,7 @@ __author__ ='Antonio Cuni <anto.cuni@gmail.com>'
 __url__='http://bitbucket.org/antocuni/fancycompleter'
 
 import rlcompleter
+import sys
 import types
 import os.path
 from itertools import count
@@ -140,7 +141,9 @@ class ConfigurableClass:
             try:
                 my_execfile(rcfile, mydict)
                 return mydict['Config']()
-            except Exception as e:
+            except Exception:
+                # python 2.5 compatibility, can't use 'except Exception as e'
+                e = sys.exc_info()[1]
                 print('** error when importing %s: %s **' % (filename, e))
         return self.DefaultConfig()
 
