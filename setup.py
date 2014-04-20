@@ -1,9 +1,10 @@
+import codecs
 import sys
 import os.path
 from setuptools import setup, find_packages
 
 readme = os.path.join(os.path.dirname(__file__), 'README')
-long_description = open(readme).read()
+long_description = codecs.open(readme, 'r', 'utf-8').read()
 
 if sys.version_info < (3,):
     install_requires=["pyrepl>=0.8.2"]
