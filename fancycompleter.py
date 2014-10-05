@@ -219,6 +219,11 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
         values = []
         n = len(attr)
         for word in dir(object):
+            if isinstance(word, unicode):
+                # this is needed because pyrepl doesn't like unicode
+                # completions: as soon as it finds something which is not str,
+                # it stops.
+                word = word.encode('utf-8')
             if word[:n] == attr and word != "__builtins__":
                 names.append(word)
                 try:

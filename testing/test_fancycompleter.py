@@ -39,3 +39,14 @@ def test_complete_with_indexer():
     assert 'lst[0].__class__' not in matches
     assert '__class__' in matches
     assert compl.attr_matches('lst[0].__class') == ['lst[0].__class__']
+
+
+def test_unicode_in___dir__():
+    class Foo(object):
+        def __dir__(self):
+            return [u'hello', 'world']
+
+    compl = Completer({'a': Foo()}, ConfigForTest)
+    matches = compl.attr_matches('a.')
+    assert matches == ['hello', 'world', ' ']
+    assert type(matches[0]) is str
