@@ -11,10 +11,12 @@ if sys.version_info < (3,):
 else:
     install_requires=[]
 
+if sys.platform == 'win32':
+    install_requires += ['pyreadline']
 
 setup(
     name='fancycompleter',
-    version='0.5',
+    version='0.6',
     author='Antonio Cuni',
     author_email='anto.cuni@gmail.com',
     py_modules=['fancycompleter'],
@@ -30,6 +32,7 @@ setup(
         "Programming Language :: Python",
         "Intended Audience :: Developers",
         "Operating System :: POSIX",
+        "Operating System :: Microsoft :: Windows",
         "Topic :: Utilities",
         ],
     install_requires=install_requires,

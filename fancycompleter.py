@@ -107,9 +107,26 @@ class DefaultConfig:
         else:
             return pyrepl.readline, False
 
+    def find_pyreadline(self):
+        try:
+            import readline
+            import pyreadline
+            from pyreadline.modes import basemode
+        except ImportError:
+            return None
+        if hasattr(basemode, 'stripcolor'):
+            # modern version of pyreadline
+            return readline, True
+        else:
+            return readline, False
+
     def find_best_readline(self):
         if self.prefer_pyrepl:
             result = self.find_pyrepl()
+            if result:
+                return result
+        if sys.platform == 'win32':
+            result = self.find_pyreadline()
             if result:
                 return result
         import readline
