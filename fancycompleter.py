@@ -115,7 +115,8 @@ class DefaultConfig:
         except ImportError:
             return None
         if hasattr(basemode, 'stripcolor'):
-            # modern version of pyreadline
+            # modern version of pyreadline; see:
+            # https://github.com/pyreadline/pyreadline/pull/48
             return readline, True
         else:
             return readline, False
