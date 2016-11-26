@@ -95,7 +95,7 @@ colors you need a recent version, >= 0.8.2.
 Starting from version 0.6.1, ``fancycompleter`` works also on Windows, relying
 on pyreadline_. At the moment of writing, the latest version of ``pyreadline``
 is 2.1, which does **not** support colored completions; here is the `pull
-request`_ which adds support for them. To enable colors, you can install ``pyreadline`` from `this fork_`:
+request`_ which adds support for them. To enable colors, you can install ``pyreadline`` from `this fork`_:
 
 .. _`pull request`: https://github.com/pyreadline/pyreadline/pull/48
 .. _`this fork`: https://github.com/antocuni/pyreadline
