@@ -40,7 +40,7 @@ Other features
   ``mydict['foo'].<TAB>`` works (assuming that ``mydict`` is a dictionary and
   that it contains the key ``'foo'``, of course :-)).
 
-* Starting from Python 2.6, is the completed name is a callable,
+* Starting from Python 2.6, if the completed name is a callable,
   ``rlcompleter`` automatically adds an open parenthesis ``(``.  This is
   annoying in case we do not want to really call it, so ``fancycompleter``
   disable this behaviour.
@@ -73,7 +73,7 @@ How do I get colors?
 If you are using PyPy_, you can stop reading now, as ``fancycompleter`` will
 work out of the box.
 
-If you are on CPython and you installed ``fancycompleter`` with ``pip`` or
+If you are using CPython on Linux/OSX and you installed ``fancycompleter`` with ``pip`` or
 ``easy_install``, they automatically installed ``pyrepl`` as a requirement,
 and you should also get colors out of the box.  If for some reason you don't
 want to use ``pyrepl``, you should keep on reading.
@@ -91,6 +91,14 @@ There are two ways to solve it:
 
 By default, ``fancycompleter`` tries to use ``pyrepl`` if it finds it.  To get
 colors you need a recent version, >= 0.8.2.
+
+Starting from version 0.6.1, ``fancycompleter`` works also on Windows, relying
+on pyreadline_. At the moment of writing, the latest version of ``pyreadline``
+is 2.1, which does **not** support colored completions; here is the `pull
+request`_ which adds support for them. To enable colors, you can install ``pyreadline`` from `this fork_`:
+
+.. _`pull request`: https://github.com/pyreadline/pyreadline/pull/48
+.. _`this fork`: https://github.com/antocuni/pyreadline
 
 If you are using Python 3, ``pyrepl`` does not work, and thus is not
 installed. Your only option to get colors is to use a patched ``readline``, as
@@ -168,17 +176,6 @@ needed and thus ``interact()`` will simply returns, letting the built-in
 prompt to show up.  The same is true if we are running PyPy, as its built-in
 prompt is based on pyrepl anyway.
 
-Does it work on Windows?
-------------------------
-
-Unfortunately, not.  On Windows, ``readline`` is not available at all, and
-while pyrepl is written in pure Python, it sill makes use of unix specific
-syscalls to control the terminal.
-
-If you really want it, you might try to port pyrepl on Windows by writing the
-equivalent of `unix_console.py`_, or you can try to use pyreadline_ and adapt
-it to support colors in completions.  If you manage to make it working, I'd
-like to know, please :-).
 
 .. _rlcompleter: http://docs.python.org/library/rlcompleter.html
 .. _PYTHONSTARTUP: http://docs.python.org/using/cmdline.html#envvar-PYTHONSTARTUP
@@ -187,5 +184,4 @@ like to know, please :-).
 .. _pyrepl: http://codespeak.net/pyrepl/
 .. _`SVN repository`: http://codespeak.net/svn/pyrepl/trunk/pyrepl/
 .. _`code.InteractiveConsole`: http://docs.python.org/library/code.html#code.InteractiveConsole
-.. _`unix_console.py`: http://codespeak.net/svn/pyrepl/trunk/pyrepl/pyrepl/unix_console.py
-.. _pyreadline: https://code.launchpad.net/~pyreadline/
+.. _pyreadline: https://pypi.python.org/pypi/pyreadline
