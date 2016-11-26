@@ -70,13 +70,13 @@ is really going on?`_ for details.
 How do I get colors?
 ---------------------
 
-If you are using PyPy_, you can stop reading now, as ``fancycompleter`` will
+If you are using **PyPy**, you can stop reading now, as ``fancycompleter`` will
 work out of the box.
 
-If you are using CPython on Linux/OSX and you installed ``fancycompleter`` with ``pip`` or
-``easy_install``, they automatically installed ``pyrepl`` as a requirement,
-and you should also get colors out of the box.  If for some reason you don't
-want to use ``pyrepl``, you should keep on reading.
+If you are using **CPython on Linux/OSX** and you installed ``fancycompleter``
+with ``pip`` or ``easy_install``, they automatically installed ``pyrepl`` as a
+requirement, and you should also get colors out of the box.  If for some
+reason you don't want to use ``pyrepl``, you should keep on reading.
 
 By default, in CPython line input and TAB completion are handled by `GNU
 readline`_ (at least on Linux).  However, ``readline`` explicitly strips
@@ -92,7 +92,7 @@ There are two ways to solve it:
 By default, ``fancycompleter`` tries to use ``pyrepl`` if it finds it.  To get
 colors you need a recent version, >= 0.8.2.
 
-Starting from version 0.6.1, ``fancycompleter`` works also on Windows, relying
+Starting from version 0.6.1, ``fancycompleter`` works also on **Windows**, relying
 on pyreadline_. At the moment of writing, the latest version of ``pyreadline``
 is 2.1, which does **not** support colored completions; here is the `pull
 request`_ which adds support for them. To enable colors, you can install
@@ -103,7 +103,7 @@ request`_ which adds support for them. To enable colors, you can install
 .. _`pull request`: https://github.com/pyreadline/pyreadline/pull/48
 .. _`this fork`: https://github.com/antocuni/pyreadline
 
-If you are using Python 3, ``pyrepl`` does not work, and thus is not
+If you are using **Python 3**, ``pyrepl`` does not work, and thus is not
 installed. Your only option to get colors is to use a patched ``readline``, as
 explained below.
 
@@ -182,7 +182,6 @@ prompt is based on pyrepl anyway.
 
 .. _rlcompleter: http://docs.python.org/library/rlcompleter.html
 .. _PYTHONSTARTUP: http://docs.python.org/using/cmdline.html#envvar-PYTHONSTARTUP
-.. _PyPy: http://pypy.org
 .. _`GNU readline`: http://tiswww.case.edu/php/chet/readline/rltop.html
 .. _pyrepl: http://codespeak.net/pyrepl/
 .. _`SVN repository`: http://codespeak.net/svn/pyrepl/trunk/pyrepl/
