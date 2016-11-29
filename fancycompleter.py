@@ -2,8 +2,9 @@
 fancycompleter: colorful TAB completion for Python prompt
 """
 from __future__ import with_statement
+from __future__ import print_function
 
-__version__='0.6.2'
+__version__='0.6.3'
 __author__ ='Antonio Cuni <anto.cuni@gmail.com>'
 __url__='http://bitbucket.org/antocuni/fancycompleter'
 
@@ -372,3 +373,67 @@ def interact(persist_history=None):
         # standard one is fake enough :-)
         interact_pyrepl()
         sys.exit()
+
+
+class Installer(object):
+    """
+    Helper to install fancycompleter in PYTHONSTARTUP
+    """
+
+    def __init__(self, basepath, force):
+        fname = os.path.join(basepath, 'python_startup.py')
+        self.filename = os.path.expanduser(fname)
+        self.force = force
+
+    def check(self):
+        PYTHONSTARTUP = os.environ.get('PYTHONSTARTUP')
+        if PYTHONSTARTUP:
+            return 'PYTHONSTARTUP already defined: %s' % PYTHONSTARTUP
+        if os.path.exists(self.filename):
+            return '%s already exists' % self.filename
+
+    def install(self):
+        import textwrap
+        error = self.check()
+        if error and not self.force:
+            print(error)
+            print('Use --force to overwrite.')
+            return False
+        with open(self.filename, 'w') as f:
+            f.write(textwrap.dedent("""
+                import fancycompleter
+                fancycompleter.interact(persist_history=True)
+            """))
+        self.set_env_var()
+        return True
+
+    def set_env_var(self):
+        if sys.platform == 'win32':
+            os.system('SETX PYTHONSTARTUP "%s"' % self.filename)
+            print('%PYTHONSTARTUP% set to', self.filename)
+        else:
+            print('startup file written to', self.filename)
+            print('Append this line to your ~/.bashrc:')
+            print('    export PYTHONSTARTUP=%s' % self.filename)
+
+
+if __name__ == '__main__':
+    def usage():
+        print('Usage: python -m fancycompleter install [-f|--force]')
+        sys.exit(1)
+    
+    cmd = None
+    force = False
+    for item in sys.argv[1:]:
+        if item in ('install',):
+            cmd = item
+        elif item in ('-f', '--force'):
+            force = True
+        else:
+            usage()
+    #
+    if cmd == 'install':
+        installer = Installer('~', force)
+        installer.install()
+    else:
+        usage()

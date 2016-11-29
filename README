@@ -55,11 +55,20 @@ First, install the module with ``pip`` or ``easy_install``::
 Then, at the Python interactive prompt::
 
     >>> import fancycompleter
-    >>> fancycompleter.interact()
+    >>> fancycompleter.interact(persist_history=True)
     >>>
 
-If you want to enable it automatically, you can those lines to your startup
-file (identified by the `PYTHONSTARTUP`_ environment variable).
+If you want to enable ``fancycompleter`` automatically at startup, you can add
+those two lines at the end of your `PYTHONSTARTUP`_ script.
+
+If you do **not** have a `PYTHONSTARTUP_` script, the following command will
+create one for you in ``~/python_startup.py``::
+
+    $ python -m fancycompleter install
+
+On Windows, ``install`` automatically sets the ``PYTHONSTARTUP`` environment
+variable. On other systems, you need to add the proper command in
+``~/.bashrc`` or equivalent.
 
 **Note**: depending on your particular system, ``interact`` might need to play
 dirty tricks in order to display colors, although everything should "just

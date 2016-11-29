@@ -1,4 +1,5 @@
-from fancycompleter import DefaultConfig, Completer, Color
+import os
+from fancycompleter import DefaultConfig, Completer, Color, Installer
 
 class ConfigForTest(DefaultConfig):
     use_colors = False
@@ -50,3 +51,38 @@ def test_unicode_in___dir__():
     matches = compl.attr_matches('a.')
     assert matches == ['hello', 'world', ' ']
     assert type(matches[0]) is str
+
+
+class MyInstaller(Installer):
+    env_var = 0
+
+    def set_env_var(self):
+        self.env_var += 1
+
+class TestInstaller(object):
+    
+    def test_check(self, monkeypatch, tmpdir):
+        installer = MyInstaller(str(tmpdir), force=False)
+        monkeypatch.setenv('PYTHONSTARTUP', '')
+        assert installer.check() is None
+        f = tmpdir.join('python_startup.py').ensure(file=True)
+        assert installer.check() == '%s already exists' % f
+        monkeypatch.setenv('PYTHONSTARTUP', 'foo')
+        assert installer.check() == 'PYTHONSTARTUP already defined: foo'
+
+    def test_install(self, monkeypatch, tmpdir):
+        installer = MyInstaller(str(tmpdir), force=False)
+        monkeypatch.setenv('PYTHONSTARTUP', '')
+        assert installer.install()
+        assert 'fancycompleter' in tmpdir.join('python_startup.py').read()
+        assert installer.env_var == 1
+        #
+        # the second time, it fails because the file already exists
+        assert not installer.install()
+        assert installer.env_var == 1
+        #
+        # the third time, it succeeds because we set force
+        installer.force = True
+        assert installer.install()
+        assert installer.env_var == 2
+        
