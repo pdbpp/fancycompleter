@@ -41,6 +41,10 @@ def test_complete_with_indexer():
     assert '__class__' in matches
     assert compl.attr_matches('lst[0].__class') == ['lst[0].__class__']
 
+def test_complete_exception():
+    compl = Completer({}, ConfigForTest)
+    assert compl.attr_matches('xxx.') == []
+    
 
 def test_unicode_in___dir__():
     class Foo(object):

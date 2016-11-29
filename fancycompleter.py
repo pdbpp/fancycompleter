@@ -236,7 +236,10 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
         expr, attr = text.rsplit('.', 1)
         if '(' in expr or ')' in expr:  # don't call functions
             return
-        object = eval(expr, self.namespace)
+        try:
+            object = eval(expr, self.namespace)
+        except Exception:
+            return []
         names = []
         values = []
         n = len(attr)
