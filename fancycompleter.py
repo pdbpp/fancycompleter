@@ -18,6 +18,8 @@ try:
 except NameError:
     from functools import reduce
 
+PY3K = sys.version_info[0] >= 0
+
 # python3 compatibility
 # ---------------------
 try:
@@ -241,7 +243,7 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
         values = []
         n = len(attr)
         for word in dir(object):
-            if isinstance(word, unicode):
+            if isinstance(word, unicode) and not PY3K:
                 # this is needed because pyrepl doesn't like unicode
                 # completions: as soon as it finds something which is not str,
                 # it stops.
@@ -290,6 +292,7 @@ def commonprefix(names, base = ''):
 
     if base:
         names = filter(lambda x, base=base: x.startswith(base), names)
+        names = list(names) # for py3k
     if not names:
         return ''
     return reduce(commonfunc,names)
