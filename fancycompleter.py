@@ -18,7 +18,7 @@ try:
 except NameError:
     from functools import reduce
 
-PY3K = sys.version_info[0] >= 0
+PY3K = sys.version_info[0] >= 3
 
 # python3 compatibility
 # ---------------------
