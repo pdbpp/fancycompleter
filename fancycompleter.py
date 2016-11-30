@@ -226,10 +226,7 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
                 values.append(None)
             else:
                 values.append(eval(name, self.namespace))
-        matches = [self.color_for_obj(i, name, obj)
-                   for i, name, obj
-                   in izip(count(), names, values)]
-        return matches + [' ']
+        return self.color_matches(names, values)
 
     def attr_matches(self, text):
         import re
@@ -260,13 +257,17 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
         prefix = commonprefix(names)
         if prefix and prefix != attr:
             return ['%s.%s' % (expr, prefix)] # autocomplete prefix
+        return self.color_matches(names, values)
 
-        matches = [self.color_for_obj(i, name, value)
-                   for i, name, value
+    def color_matches(self, names, values):
+        matches = [self.color_for_obj(i, name, obj)
+                   for i, name, obj
                    in izip(count(), names, values)]
         # we add a space at the end to prevent the automatic completion of the
         # common prefix, which is the ANSI ESCAPE sequence
-        return matches + [' ']
+        if matches:
+            return matches + [' ']
+        return []
 
     def color_for_obj(self, i, name, value):
         if not self.config.use_colors:
@@ -289,8 +290,8 @@ def commonprefix(names, base = ''):
 
     if base:
         names = filter(lambda x, base=base: x.startswith(base), names)
-        if not names:
-            return ''
+    if not names:
+        return ''
     return reduce(commonfunc,names)
 
 

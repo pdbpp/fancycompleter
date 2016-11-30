@@ -1,8 +1,16 @@
 import os
-from fancycompleter import DefaultConfig, Completer, Color, Installer
+from fancycompleter import DefaultConfig, Completer, Color, Installer, commonprefix
 
 class ConfigForTest(DefaultConfig):
     use_colors = False
+
+def test_commonprefix():
+    assert commonprefix(['isalpha', 'isdigit', 'foo']) == ''
+    assert commonprefix(['isalpha', 'isdigit']) == 'is'
+    assert commonprefix(['isalpha', 'isdigit', 'foo'], base='i') == 'is'
+    assert commonprefix([]) == ''
+    assert commonprefix(['aaa', 'bbb'], base='x') == ''
+
 
 def test_complete_attribute():
     compl = Completer({'a': None}, ConfigForTest)
@@ -72,6 +80,11 @@ def test_autocomplete():
 def test_complete_exception():
     compl = Completer({}, ConfigForTest)
     assert compl.attr_matches('xxx.') == []
+
+def test_complete_invalid_attr():
+    compl = Completer({'str': str}, ConfigForTest)
+    assert compl.attr_matches('str.xx') == []
+
 
 def test_unicode_in___dir__():
     class Foo(object):
