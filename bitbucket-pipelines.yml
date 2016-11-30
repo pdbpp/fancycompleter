@@ -1,0 +1,9 @@
+image: themattrix/tox:latest
+
+pipelines:
+  default:
+    - step:
+        script:
+          - pip --version
+          - tox --version
+          - tox
