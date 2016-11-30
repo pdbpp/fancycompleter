@@ -14,7 +14,7 @@ elif sys.version_info < (3,):
 
 setup(
     name='fancycompleter',
-    version='0.6.3',
+    use_scm_version=True,
     author='Antonio Cuni',
     author_email='anto.cuni@gmail.com',
     py_modules=['fancycompleter'],
@@ -27,11 +27,14 @@ setup(
         "Development Status :: 4 - Beta",
         "Environment :: Console",
         "License :: OSI Approved :: BSD License",
-        "Programming Language :: Python",
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.5',
         "Intended Audience :: Developers",
         "Operating System :: POSIX",
         "Operating System :: Microsoft :: Windows",
         "Topic :: Utilities",
         ],
+    setup_requires=['setuptools_scm'],
     install_requires=install_requires,
 )
