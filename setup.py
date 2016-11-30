@@ -14,7 +14,7 @@ elif sys.version_info < (3,):
 
 setup(
     name='fancycompleter',
-    version='0.6.2',
+    version='0.6.3',
     author='Antonio Cuni',
     author_email='anto.cuni@gmail.com',
     py_modules=['fancycompleter'],
