@@ -4,7 +4,16 @@ fancycompleter: colorful TAB completion for Python prompt
 from __future__ import with_statement
 from __future__ import print_function
 
-__version__ = '0.7'
+try:
+    from pkg_resources import get_distribution, DistributionNotFound
+except ImportError:
+    __version__ = 'N/A'
+else:
+    try:
+        __version__ = get_distribution(__name__).version
+    except DistributionNotFound:
+        # package is not installed
+        __version__ = 'N/A'
 
 import rlcompleter
 import sys
