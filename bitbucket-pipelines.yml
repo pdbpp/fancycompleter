@@ -6,6 +6,6 @@ pipelines:
         script:
           - pip --version
           - pip install -U setuptools
-          - pip install -U mercurial
+          - pip install -U mercurial==3.9.1
           - tox --version
           - tox
