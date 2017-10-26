@@ -5,6 +5,7 @@ pipelines:
     - step:
         script:
           - pip install -U setuptools
+          - pip install -U mercurial
           - pip --version
           - tox --version
           - tox
