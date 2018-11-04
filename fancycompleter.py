@@ -339,7 +339,7 @@ def has_leopard_libedit(config):
     cmd = ["otool", "-L", config.readline.__file__]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     stdout, stderr = p.communicate()
-    if p.returncode == 0 and 'libedit' in stdout:
+    if p.returncode == 0 and 'libedit' in stdout.decode('utf-8'):
         return True
     return False
 
