@@ -260,7 +260,11 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
             if name in keyword.kwlist:
                 values.append(None)
             else:
-                values.append(eval(name, self.namespace))
+                try:
+                    values.append(eval(name, self.namespace))
+                except Exception:
+                    # Skip e.g. SyntaxError with "elif".
+                    pass
         return self.color_matches(names, values)
 
     def attr_matches(self, text):
