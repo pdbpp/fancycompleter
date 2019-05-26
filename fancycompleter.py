@@ -336,19 +336,15 @@ def commonprefix(names, base = ''):
 
 
 def has_leopard_libedit(config):
-    try:
-        import commands
-    except ImportError:
-        # python3? just return False for now
-        return False
-    import sys
     # Detect if we are using Leopard's libedit.
-    # Taken from IPython's rlineimpl.py.
+    # Adapted from IPython's rlineimpl.py.
     if config.using_pyrepl or sys.platform != 'darwin':
         return False
-    cmd =  "otool -L %s | grep libedit" % config.readline.__file__
-    (status, result) = commands.getstatusoutput(cmd)
-    if status == 0 and len(result) > 0:
+    from subprocess import Popen, PIPE
+    cmd = ["otool", "-L", config.readline.__file__]
+    p = Popen(cmd, stdout=PIPE, stderr=PIPE)
+    stdout, stderr = p.communicate()
+    if p.returncode == 0 and 'libedit' in stdout.decode('utf-8'):
         return True
     return False
     
