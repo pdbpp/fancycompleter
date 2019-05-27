@@ -304,18 +304,21 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
         return self.color_matches(names, values)
 
     def color_matches(self, names, values):
+        if not self.config.use_colors:
+            return names
+
         matches = [self.color_for_obj(i, name, obj)
                    for i, name, obj
                    in izip(count(), names, values)]
-        # we add a space at the end to prevent the automatic completion of the
-        # common prefix, which is the ANSI ESCAPE sequence
-        if matches:
+        # We add a space at the end to prevent the automatic completion of the
+        # common prefix, which is the ANSI ESCAPE sequence.
+        # We typically come here with more than 1 match always, otherwise
+        # it would not use coloring (with common prefix).
+        if len(matches) > 1:
             return matches + [' ']
-        return []
+        return matches
 
     def color_for_obj(self, i, name, value):
-        if not self.config.use_colors:
-            return name
         t = type(value)
         color = self.config.color_by_type.get(t, '00')
         # hack: prepend an (increasing) fake escape sequence,
