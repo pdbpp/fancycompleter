@@ -28,7 +28,10 @@ jobs:
       env: TOXENV=checkqa
 
 install:
-  - pip install tox
+  - pip install tox==3.12.1
+  # NOTE: need to upgrade virtualenv to allow "Direct url requirement" with
+  # installation in tox.
+  - pip install virtualenv==16.6.0
 
 script:
   - tox
