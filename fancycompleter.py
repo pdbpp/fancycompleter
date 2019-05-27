@@ -351,11 +351,11 @@ def has_leopard_libedit(config):
     return config.readline.__doc__ and 'libedit' in config.readline.__doc__
 
 
-def setup():
+def setup(**kwargs):
     """
     Install fancycompleter as the default completer for readline.
     """
-    completer = Completer()
+    completer = Completer(**kwargs)
     readline = completer.config.readline
     if has_leopard_libedit(completer.config):
         readline.parse_and_bind("bind ^I rl_complete")
@@ -390,7 +390,7 @@ def setup_history(completer, persist_history):
     atexit.register(save_history)
 
 
-def interact(persist_history=None):
+def interact(persist_history=None, **kwargs):
     """
     Main entry point for fancycompleter: run an interactive Python session
     after installing fancycompleter.
@@ -411,7 +411,7 @@ def interact(persist_history=None):
     By default, pyrepl is preferred and automatically used if found.
     """
     import sys
-    completer = setup()
+    completer = setup(**kwargs)
     if persist_history:
         setup_history(completer, persist_history)
     if completer.config.using_pyrepl and '__pypy__' not in sys.builtin_module_names:
