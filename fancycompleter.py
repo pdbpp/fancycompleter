@@ -150,7 +150,7 @@ class DefaultConfig:
     def find_pyreadline(self):
         try:
             import readline
-            import pyreadline
+            import pyreadline  # noqa: F401  # XXX: needed really?
             from pyreadline.modes import basemode
         except ImportError:
             return None
@@ -249,7 +249,8 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
             return rlcompleter.Completer.complete(self, text, state)
 
     def _callable_postfix(self, val, word):
-        # disable automatic insertion of '(' for global callables: this method exists only in Python 2.6+
+        # disable automatic insertion of '(' for global callables:
+        # this method exists only in Python 2.6+
         return word
 
     def global_matches(self, text):
@@ -273,7 +274,6 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
         return self.color_matches(names, values)
 
     def attr_matches(self, text):
-        import re
         expr, attr = text.rsplit('.', 1)
         if '(' in expr or ')' in expr:  # don't call functions
             return
@@ -294,7 +294,7 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
                 names.append(word)
                 try:
                     value = getattr(object, word)
-                except:
+                except Exception:
                     value = None
                 values.append(value)
 
@@ -318,8 +318,8 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
             return name
         t = type(value)
         color = self.config.color_by_type.get(t, '00')
-        # hack hack hack
-        # prepend a fake escape sequence, so that readline can sort the matches correctly
+        # hack: prepend an (increasing) fake escape sequence,
+        # so that readline can sort the matches correctly.
         return '\x1b[%03d;00m' % i + Color.set(color, name)
 
 
@@ -369,8 +369,6 @@ def setup():
 
 
 def interact_pyrepl():
-    import pyrepl
-    import os
     import sys
     from pyrepl import readline
     from pyrepl.simple_interact import run_multiline_interactive_console

@@ -1,4 +1,3 @@
-import os
 from fancycompleter import (DefaultConfig, Completer, Color, Installer,
                             commonprefix, LazyVersion)
 
