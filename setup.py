@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-    name='fancycompleter-pdbpp',
+    name='fancycompleter',
     setup_requires="setupmeta",
     maintainer="Daniel Hahler",
     url='https://github.com/pdbpp/fancycompleter',
