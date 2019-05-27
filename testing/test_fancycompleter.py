@@ -42,7 +42,7 @@ def test_complete_global():
     compl = Completer({'foobar': 1, 'foobazzz': 2}, ConfigForTest)
     assert compl.global_matches('foo') == ['fooba']
     matches = compl.global_matches('fooba')
-    assert set(matches) == set(['foobar', 'foobazzz', ' '])
+    assert set(matches) == set(['foobar', 'foobazzz'])
     assert compl.global_matches('foobaz') == ['foobazzz']
 
 
@@ -69,7 +69,7 @@ def test_autocomplete():
     # automatically insert the common prefix (which will the the ANSI escape
     # sequence if we use colors)
     matches = compl.attr_matches('A.a')
-    assert sorted(matches) == [' ', 'aaa', 'abc_1', 'abc_2', 'abc_3']
+    assert sorted(matches) == ['aaa', 'abc_1', 'abc_2', 'abc_3']
     #
     # IF there is an actual common prefix, we return just it, so that readline
     # will insert it into place
@@ -80,7 +80,7 @@ def test_autocomplete():
     # for this common prefix. Agai, we insert a spurious space to prevent the
     # automatic completion of ANSI sequences
     matches = compl.attr_matches('A.abc_')
-    assert sorted(matches) == [' ', 'abc_1', 'abc_2', 'abc_3']
+    assert sorted(matches) == ['abc_1', 'abc_2', 'abc_3']
 
 
 def test_complete_exception():
@@ -100,7 +100,7 @@ def test_unicode_in___dir__():
 
     compl = Completer({'a': Foo()}, ConfigForTest)
     matches = compl.attr_matches('a.')
-    assert matches == ['hello', 'world', ' ']
+    assert matches == ['hello', 'world']
     assert type(matches[0]) is str
 
 

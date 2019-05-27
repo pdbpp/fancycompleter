@@ -304,6 +304,9 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
         return self.color_matches(names, values)
 
     def color_matches(self, names, values):
+        if not self.config.use_colors:
+            return names
+
         matches = [self.color_for_obj(i, name, obj)
                    for i, name, obj
                    in izip(count(), names, values)]
@@ -314,8 +317,6 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
         return []
 
     def color_for_obj(self, i, name, value):
-        if not self.config.use_colors:
-            return name
         t = type(value)
         color = self.config.color_by_type.get(t, '00')
         # hack: prepend an (increasing) fake escape sequence,
