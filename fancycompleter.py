@@ -35,6 +35,7 @@ except NameError:
 
 # ----------------------
 
+
 class LazyVersion(object):
 
     def __init__(self, pkg):
@@ -68,14 +69,16 @@ class LazyVersion(object):
     def __ne__(self, other):
         return not self == other
 
+
 __version__ = LazyVersion(__name__)
 
 # ----------------------
 
+
 class Color:
     black = '30'
     darkred = '31'
-    darkgreen = '32'    
+    darkgreen = '32'
     brown = '33'
     darkblue = '34'
     purple = '35'
@@ -98,14 +101,15 @@ class Color:
             pass
         return '\x1b[%sm%s\x1b[00m' % (color, string)
 
+
 class DefaultConfig:
 
     consider_getitems = True
     prefer_pyrepl = True
-    use_colors = 'auto'  
-    readline = None # set by setup()
-    using_pyrepl = False # overwritten by find_pyrepl
-  
+    use_colors = 'auto'
+    readline = None  # set by setup()
+    using_pyrepl = False  # overwritten by find_pyrepl
+
     color_by_type = {
         types.BuiltinMethodType: Color.turquoise,
         types.BuiltinMethodType: Color.turquoise,
@@ -116,10 +120,10 @@ class DefaultConfig:
 
         types.FunctionType: Color.blue,
         types.BuiltinFunctionType: Color.blue,
-        
+
         ClassType: Color.fuchsia,
         type: Color.fuchsia,
-        
+
         types.ModuleType: Color.teal,
         type(None): Color.lightgray,
         str: Color.green,
@@ -128,7 +132,7 @@ class DefaultConfig:
         float: Color.yellow,
         complex: Color.yellow,
         bool: Color.yellow,
-        }
+    }
 
     def find_pyrepl(self):
         try:
@@ -167,12 +171,13 @@ class DefaultConfig:
             if result:
                 return result
         import readline
-        return readline, False # by default readline does not support colors
+        return readline, False  # by default readline does not support colors
 
     def setup(self):
         self.readline, supports_color = self.find_best_readline()
         if self.use_colors == 'auto':
             self.use_colors = supports_color
+
 
 def my_execfile(filename, mydict):
     with open(filename) as f:
@@ -206,7 +211,7 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
     """
     When doing someting like a.b.<TAB>, display only the attributes of
     b instead of the full a.b.attr string.
-    
+
     Optionally, display the various completions in different colors
     depending on the type.
     """
@@ -214,7 +219,7 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
     DefaultConfig = DefaultConfig
     config_filename = '.fancycompleterrc.py'
 
-    def __init__(self, namespace = None, Config=None):
+    def __init__(self, namespace=None, Config=None):
         rlcompleter.Completer.__init__(self, namespace)
         self.config = self.get_config(Config)
         self.config.setup()
@@ -239,10 +244,10 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
         http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/496812
         """
         if text == "":
-            return ['\t',None][state]
+            return ['\t', None][state]
         else:
-            return rlcompleter.Completer.complete(self,text,state)
-            
+            return rlcompleter.Completer.complete(self, text, state)
+
     def _callable_postfix(self, val, word):
         # disable automatic insertion of '(' for global callables: this method exists only in Python 2.6+
         return word
@@ -292,10 +297,10 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
                 except:
                     value = None
                 values.append(value)
-                
+
         prefix = commonprefix(names)
         if prefix and prefix != attr:
-            return ['%s.%s' % (expr, prefix)] # autocomplete prefix
+            return ['%s.%s' % (expr, prefix)]  # autocomplete prefix
         return self.color_matches(names, values)
 
     def color_matches(self, names, values):
@@ -319,20 +324,20 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
 
 
 # stolen from rlcompleter2
-def commonprefix(names, base = ''):
+def commonprefix(names, base=''):
     """ return the common prefix of all 'names' starting with 'base'
     """
-    def commonfunc(s1,s2):
-        while not s2.startswith(s1): 
-            s1=s1[:-1]
+    def commonfunc(s1, s2):
+        while not s2.startswith(s1):
+            s1 = s1[:-1]
         return s1
 
     if base:
         names = filter(lambda x, base=base: x.startswith(base), names)
-        names = list(names) # for py3k
+        names = list(names)  # for py3k
     if not names:
         return ''
-    return reduce(commonfunc,names)
+    return reduce(commonfunc, names)
 
 
 def has_leopard_libedit(config):
@@ -347,7 +352,8 @@ def has_leopard_libedit(config):
     if p.returncode == 0 and 'libedit' in stdout.decode('utf-8'):
         return True
     return False
-    
+
+
 def setup():
     """
     Install fancycompleter as the default completer for readline.
@@ -361,13 +367,16 @@ def setup():
     readline.set_completer(completer.complete)
     return completer
 
+
 def interact_pyrepl():
     import pyrepl
-    import os, sys
+    import os
+    import sys
     from pyrepl import readline
     from pyrepl.simple_interact import run_multiline_interactive_console
     sys.modules['readline'] = readline
     run_multiline_interactive_console()
+
 
 def setup_history(completer, persist_history):
     import atexit
@@ -380,9 +389,11 @@ def setup_history(completer, persist_history):
     filename = os.path.expanduser(filename)
     if os.path.isfile(filename):
         readline.read_history_file(filename)
+
     def save_history():
         readline.write_history_file(filename)
     atexit.register(save_history)
+
 
 def interact(persist_history=None):
     """
@@ -461,7 +472,7 @@ if __name__ == '__main__':
     def usage():
         print('Usage: python -m fancycompleter install [-f|--force]')
         sys.exit(1)
-    
+
     cmd = None
     force = False
     for item in sys.argv[1:]:
