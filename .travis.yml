@@ -28,6 +28,7 @@ jobs:
       env: TOXENV=checkqa
 
 install:
+  - pip install -U pip
   - pip install tox
 
 script:
