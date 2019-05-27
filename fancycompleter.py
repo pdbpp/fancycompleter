@@ -345,13 +345,10 @@ def has_leopard_libedit(config):
     # Adapted from IPython's rlineimpl.py.
     if config.using_pyrepl or sys.platform != 'darwin':
         return False
-    from subprocess import Popen, PIPE
-    cmd = ["otool", "-L", config.readline.__file__]
-    p = Popen(cmd, stdout=PIPE, stderr=PIPE)
-    stdout, stderr = p.communicate()
-    if p.returncode == 0 and 'libedit' in stdout.decode('utf-8'):
-        return True
-    return False
+
+    # Official Python docs state that 'libedit' is in the docstring for
+    # libedit readline.
+    return config.readline.__doc__ and 'libedit' in config.readline.__doc__
 
 
 def setup():
