@@ -6,6 +6,11 @@ class ConfigForTest(DefaultConfig):
     use_colors = False
 
 
+class ColorConfig(DefaultConfig):
+    use_colors = True
+    color_by_type = {type: '31'}
+
+
 def test_commonprefix():
     assert commonprefix(['isalpha', 'isdigit', 'foo']) == ''
     assert commonprefix(['isalpha', 'isdigit']) == 'is'
@@ -24,18 +29,23 @@ def test_complete_attribute():
 
 
 def test_complete_attribute_colored():
-    class ColorConfig(DefaultConfig):
-        use_colors = True
-        color_by_type = {type: '31'}
-
     compl = Completer({'a': 42}, ColorConfig)
     matches = compl.attr_matches('a.__')
+    assert len(matches) > 2
+    expected_part = Color.set('31', '__class__')
     for match in matches:
-        if Color.set('31', '__class__') in match:
+        if expected_part in match:
             break
     else:
         assert False
     assert ' ' in matches
+
+
+def test_complete_colored_single_match():
+    """No coloring, via commonprefix."""
+    compl = Completer({'foobar': 42}, ColorConfig)
+    matches = compl.global_matches('foob')
+    assert matches == ['foobar']
 
 
 def test_complete_global():

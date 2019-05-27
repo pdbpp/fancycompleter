@@ -310,11 +310,13 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
         matches = [self.color_for_obj(i, name, obj)
                    for i, name, obj
                    in izip(count(), names, values)]
-        # we add a space at the end to prevent the automatic completion of the
-        # common prefix, which is the ANSI ESCAPE sequence
-        if matches:
+        # We add a space at the end to prevent the automatic completion of the
+        # common prefix, which is the ANSI ESCAPE sequence.
+        # We typically come here with more than 1 match always, otherwise
+        # it would not use coloring (with common prefix).
+        if len(matches) > 1:
             return matches + [' ']
-        return []
+        return matches
 
     def color_for_obj(self, i, name, value):
         t = type(value)
