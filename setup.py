@@ -1,7 +1,7 @@
 import codecs
 import sys
 import os.path
-from setuptools import setup, find_packages
+from setuptools import setup
 
 readme = os.path.join(os.path.dirname(__file__), 'README')
 long_description = codecs.open(readme, 'r', 'utf-8').read()

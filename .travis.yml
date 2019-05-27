@@ -24,6 +24,9 @@ jobs:
     - python: 'pypy3'
       env: TOXENV=pypy3-coverage
 
+    - python: '3.7'
+      env: TOXENV=checkqa
+
 install:
   - pip install tox
 

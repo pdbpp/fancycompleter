@@ -1,9 +1,10 @@
-import os
 from fancycompleter import (DefaultConfig, Completer, Color, Installer,
                             commonprefix, LazyVersion)
 
+
 class ConfigForTest(DefaultConfig):
     use_colors = False
+
 
 def test_commonprefix():
     assert commonprefix(['isalpha', 'isdigit', 'foo']) == ''
@@ -21,11 +22,12 @@ def test_complete_attribute():
     assert '__class__' in matches
     assert compl.attr_matches('a.__class') == ['a.__class__']
 
+
 def test_complete_attribute_colored():
     class ColorConfig(DefaultConfig):
         use_colors = True
         color_by_type = {type: '31'}
-        
+
     compl = Completer({'a': 42}, ColorConfig)
     matches = compl.attr_matches('a.__')
     for match in matches:
@@ -35,6 +37,7 @@ def test_complete_attribute_colored():
         assert False
     assert ' ' in matches
 
+
 def test_complete_global():
     compl = Completer({'foobar': 1, 'foobazzz': 2}, ConfigForTest)
     assert compl.global_matches('foo') == ['fooba']
@@ -42,13 +45,15 @@ def test_complete_global():
     assert set(matches) == set(['foobar', 'foobazzz', ' '])
     assert compl.global_matches('foobaz') == ['foobazzz']
 
+
 def test_complete_with_indexer():
-    compl = Completer({'lst': [None,2,3]}, ConfigForTest)
+    compl = Completer({'lst': [None, 2, 3]}, ConfigForTest)
     assert compl.attr_matches('lst[0].') == ['lst[0].__']
     matches = compl.attr_matches('lst[0].__')
     assert 'lst[0].__class__' not in matches
     assert '__class__' in matches
     assert compl.attr_matches('lst[0].__class') == ['lst[0].__class__']
+
 
 def test_autocomplete():
     class A:
@@ -82,6 +87,7 @@ def test_complete_exception():
     compl = Completer({}, ConfigForTest)
     assert compl.attr_matches('xxx.') == []
 
+
 def test_complete_invalid_attr():
     compl = Completer({'str': str}, ConfigForTest)
     assert compl.attr_matches('str.xx') == []
@@ -104,8 +110,9 @@ class MyInstaller(Installer):
     def set_env_var(self):
         self.env_var += 1
 
+
 class TestInstaller(object):
-    
+
     def test_check(self, monkeypatch, tmpdir):
         installer = MyInstaller(str(tmpdir), force=False)
         monkeypatch.setenv('PYTHONSTARTUP', '')
@@ -130,13 +137,13 @@ class TestInstaller(object):
         installer.force = True
         assert installer.install()
         assert installer.env_var == 2
-        
+
 
 class TestLazyVersion(object):
 
     class MyLazyVersion(LazyVersion):
         __count = 0
-        
+
         def _load_version(self):
             assert self.__count == 0
             self.__count += 1
