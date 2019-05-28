@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='fancycompleter',
     setup_requires="setupmeta",
-    versioning="devcommit",
+    versioning="dev",
     maintainer="Daniel Hahler",
     url='https://github.com/pdbpp/fancycompleter',
     author='Antonio Cuni',
