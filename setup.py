@@ -27,7 +27,9 @@ setup(
         "Topic :: Utilities",
     ],
     install_requires=[
-        "pyrepl @ git+https://github.com/pdbpp/pyrepl@master#egg=pyrepl",
+        # TODO: back to PyPI after new release with fixes
+        # (https://github.com/pdbpp/pdbpp/issues/260)
+        "pyrepl @ git+https://github.com/pypy/pyrepl@master#egg=pyrepl",
         "pyreadline;platform_system=='Windows'",
     ],
 )
