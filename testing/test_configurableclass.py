@@ -36,8 +36,8 @@ def test_config(tmphome, capsys):
 
     # Error during execfile.
     tmphome.ensure(MyCfg.config_filename)
-    cfgfile.write("invalid_syntax(")
+    cfgfile.write("raise Exception('my_execfile_exc')")
     assert isinstance(cfg.get_config(None), DefaultCfg)
     out, err = capsys.readouterr()
     assert out == ""
-    assert err == "** error when importing ~/.mycfg: unexpected EOF while parsing (.mycfg, line 1) **\n"
+    assert err == "** error when importing ~/.mycfg: my_execfile_exc **\n"

@@ -202,18 +202,20 @@ class ConfigurableClass:
         try:
             my_execfile(rcfile, mydict)
         except Exception as exc:
-            print('** error when importing %s: %s **' % (filename, exc), file=sys.stderr)
+            sys.stderr.write("** error when importing %s: %s **\n" % (filename, exc))
             return self.DefaultConfig()
 
         try:
-            Config = mydict['Config']
+            Config = mydict["Config"]
         except KeyError:
             return self.DefaultConfig()
 
         try:
             return Config()
         except Exception as exc:
-            print('** error when getting Config from %s: %s **' % (filename, exc), file=sys.stderr)
+            sys.stderr.write(
+                "** error when getting Config from %s: %s **\n" % (filename, exc)
+            )
         return self.DefaultConfig()
 
 
