@@ -195,15 +195,25 @@ class ConfigurableClass:
         # try to load config from the ~/filename file
         filename = '~/' + self.config_filename
         rcfile = os.path.expanduser(filename)
-        if os.path.exists(rcfile):
-            mydict = {}
-            try:
-                my_execfile(rcfile, mydict)
-                return mydict['Config']()
-            except Exception:
-                # python 2.5 compatibility, can't use 'except Exception as e'
-                e = sys.exc_info()[1]
-                print('** error when importing %s: %s **' % (filename, e))
+        if not os.path.exists(rcfile):
+            return self.DefaultConfig()
+
+        mydict = {}
+        try:
+            my_execfile(rcfile, mydict)
+        except Exception as exc:
+            print('** error when importing %s: %s **' % (filename, exc), file=sys.stderr)
+            return self.DefaultConfig()
+
+        try:
+            Config = mydict['Config']
+        except KeyError:
+            return self.DefaultConfig()
+
+        try:
+            return Config()
+        except Exception as exc:
+            print('** error when getting Config from %s: %s **' % (filename, exc), file=sys.stderr)
         return self.DefaultConfig()
 
 
