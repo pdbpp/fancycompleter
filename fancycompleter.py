@@ -310,6 +310,9 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
                     value = None
                 values.append(value)
 
+        if len(names) == 1:
+            return ['%s.%s' % (expr, names[0])]  # only option, no coloring.
+
         prefix = commonprefix(names)
         if prefix and prefix != attr:
             return ['%s.%s' % (expr, prefix)]  # autocomplete prefix

@@ -48,13 +48,13 @@ def test_complete_colored_single_match():
     assert matches == ['foobar']
 
 
-def test_color_matches_adds_space_always():
+def test_does_not_color_single_match():
     class obj:
         msgs = []
 
     compl = Completer({'obj': obj}, ColorConfig)
     matches = compl.attr_matches('obj.msgs')
-    assert matches == ['\x1b[000;00m\x1b[00mmsgs\x1b[00m', ' ']
+    assert matches == ['obj.msgs']
 
 
 def test_complete_global():
