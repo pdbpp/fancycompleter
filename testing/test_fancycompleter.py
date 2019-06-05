@@ -1,5 +1,3 @@
-import sys
-
 from fancycompleter import (DefaultConfig, Completer, Color, Installer,
                             commonprefix, LazyVersion)
 

@@ -342,9 +342,6 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
         if prefix and prefix != attr:
             return ['%s.%s' % (expr, prefix)]  # autocomplete prefix
 
-        if not self.config.use_colors:
-            return names
-
         return self.color_matches(names, values)
 
     def color_matches(self, names, values):
