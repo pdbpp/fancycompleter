@@ -1,3 +1,5 @@
+import sys
+
 from fancycompleter import (DefaultConfig, Completer, Color, Installer,
                             commonprefix, LazyVersion)
 
@@ -22,6 +24,20 @@ def test_commonprefix():
 def test_complete_attribute():
     compl = Completer({'a': None}, ConfigForTest)
     assert compl.attr_matches('a.') == ['a.__']
+    matches = compl.attr_matches('a.__')
+    assert 'a.__class__' not in matches
+    assert '__class__' in matches
+    assert compl.attr_matches('a.__class') == ['a.__class__']
+
+
+def test_complete_attribute_prefix():
+    class C(object):
+        attr = 1
+        _attr = 2
+        __attr__attr = 3
+    compl = Completer({'a': C}, ConfigForTest)
+    assert compl.attr_matches('a.') == ['attr', 'mro']
+    assert compl.attr_matches('a._') == ['_C__attr__attr', '_attr']
     matches = compl.attr_matches('a.__')
     assert 'a.__class__' not in matches
     assert '__class__' in matches
