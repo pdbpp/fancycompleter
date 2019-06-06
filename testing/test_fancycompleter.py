@@ -28,6 +28,23 @@ def test_complete_attribute():
     assert compl.attr_matches('a.__class') == ['a.__class__']
 
 
+def test_complete_attribute_prefix():
+    class C(object):
+        attr = 1
+        _attr = 2
+        __attr__attr = 3
+    compl = Completer({'a': C}, ConfigForTest)
+    assert compl.attr_matches('a.') == ['attr', 'mro']
+    assert compl.attr_matches('a._') == ['_C__attr__attr', '_attr']
+    matches = compl.attr_matches('a.__')
+    assert 'a.__class__' not in matches
+    assert '__class__' in matches
+    assert compl.attr_matches('a.__class') == ['a.__class__']
+
+    compl = Completer({'a': None}, ConfigForTest)
+    assert compl.attr_matches('a._') == ['a.__']
+
+
 def test_complete_attribute_colored():
     compl = Completer({'a': 42}, ColorConfig)
     matches = compl.attr_matches('a.__')
@@ -110,6 +127,11 @@ def test_complete_exception():
 def test_complete_invalid_attr():
     compl = Completer({'str': str}, ConfigForTest)
     assert compl.attr_matches('str.xx') == []
+
+
+def test_complete_function_skipped():
+    compl = Completer({'str': str}, ConfigForTest)
+    assert compl.attr_matches('str.split().') == []
 
 
 def test_unicode_in___dir__():

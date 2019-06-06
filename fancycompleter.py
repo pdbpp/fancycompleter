@@ -284,27 +284,52 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
     def attr_matches(self, text):
         expr, attr = text.rsplit('.', 1)
         if '(' in expr or ')' in expr:  # don't call functions
-            return
+            return []
         try:
-            object = eval(expr, self.namespace)
+            thisobject = eval(expr, self.namespace)
         except Exception:
             return []
+
+        # get the content of the object, except __builtins__
+        words = set(dir(thisobject))
+        words.discard("__builtins__")
+
+        if hasattr(thisobject, '__class__'):
+            words.add('__class__')
+            words.update(rlcompleter.get_class_members(thisobject.__class__))
         names = []
         values = []
         n = len(attr)
-        for word in dir(object):
-            if isinstance(word, unicode) and not PY3K:
-                # this is needed because pyrepl doesn't like unicode
-                # completions: as soon as it finds something which is not str,
-                # it stops.
-                word = word.encode('utf-8')
-            if word[:n] == attr and word != "__builtins__":
-                names.append(word)
-                try:
-                    value = getattr(object, word)
-                except Exception:
-                    value = None
-                values.append(value)
+        if attr == '':
+            noprefix = '_'
+        elif attr == '_':
+            noprefix = '__'
+        else:
+            noprefix = None
+        words = sorted(words)
+        while True:
+            for word in words:
+                if (word[:n] == attr and
+                        not (noprefix and word[:n+1] == noprefix)):
+                    try:
+                        val = getattr(thisobject, word)
+                    except Exception:
+                        val = None  # Include even if attribute not set
+
+                    if not PY3K and isinstance(word, unicode):
+                        # this is needed because pyrepl doesn't like unicode
+                        # completions: as soon as it finds something which is not str,
+                        # it stops.
+                        word = word.encode('utf-8')
+
+                    names.append(word)
+                    values.append(val)
+            if names or not noprefix:
+                break
+            if noprefix == '_':
+                noprefix = '__'
+            else:
+                noprefix = None
 
         if len(names) == 1:
             return ['%s.%s' % (expr, names[0])]  # only option, no coloring.
@@ -312,6 +337,7 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
         prefix = commonprefix(names)
         if prefix and prefix != attr:
             return ['%s.%s' % (expr, prefix)]  # autocomplete prefix
+
         return self.color_matches(names, values)
 
     def color_matches(self, names, values):
