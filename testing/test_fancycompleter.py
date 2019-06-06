@@ -126,6 +126,11 @@ def test_complete_invalid_attr():
     assert compl.attr_matches('str.xx') == []
 
 
+def test_complete_function_skipped():
+    compl = Completer({'str': str}, ConfigForTest)
+    assert compl.attr_matches('str.split().') == []
+
+
 def test_unicode_in___dir__():
     class Foo(object):
         def __dir__(self):
