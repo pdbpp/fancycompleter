@@ -9,10 +9,6 @@ import sys
 import types
 import os.path
 from itertools import count
-try:
-    reduce
-except NameError:
-    from functools import reduce
 
 PY3K = sys.version_info[0] >= 3
 
@@ -337,21 +333,19 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
         return '\x1b[%03d;00m' % i + Color.set(color, name)
 
 
-# stolen from rlcompleter2
 def commonprefix(names, base=''):
     """ return the common prefix of all 'names' starting with 'base'
     """
-    def commonfunc(s1, s2):
-        while not s2.startswith(s1):
-            s1 = s1[:-1]
-        return s1
-
     if base:
-        names = filter(lambda x, base=base: x.startswith(base), names)
-        names = list(names)  # for py3k
+        names = [x for x in names if x.startswith(base)]
     if not names:
         return ''
-    return reduce(commonfunc, names)
+    s1 = min(names)
+    s2 = max(names)
+    for i, c in enumerate(s1):
+        if c != s2[i]:
+            return s1[:i]
+    return s1
 
 
 def has_leopard_libedit(config):
