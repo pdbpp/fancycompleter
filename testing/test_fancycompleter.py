@@ -41,6 +41,9 @@ def test_complete_attribute_prefix():
     assert '__class__' in matches
     assert compl.attr_matches('a.__class') == ['a.__class__']
 
+    compl = Completer({'a': str}, ConfigForTest)
+    assert compl.attr_matches('a._') == ['a.__']
+
 
 def test_complete_attribute_colored():
     compl = Completer({'a': 42}, ColorConfig)
