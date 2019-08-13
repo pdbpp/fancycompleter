@@ -1,9 +1,8 @@
----
-title: 'fancycompleter: colorful Python TAB completion'
----
+fancycompleter: colorful Python TAB completion
+==============================================
 
 What is is?
-===========
+-----------
 
 `fancycompleter` is a module to improve your experience in Python by
 adding TAB completion to the interactive prompt. It is an extension of
@@ -24,7 +23,7 @@ don\'t work on Python 3, see the section [How do I get
 colors?](#how-do-i-get-colors) for details.
 
 Other features
-==============
+--------------
 
 -   To save space on screen, `fancycompleter` only shows the characters
     \"after the dot\". By contrast, in the example above `rlcompleter`
@@ -42,7 +41,7 @@ Other features
     `fancycompleter` disable this behaviour.
 
 Installation
-============
+------------
 
 First, install the module with `pip` or `easy_install`:
 
@@ -76,7 +75,7 @@ section [What is really going on?](#what-is-really-going-on) for
 details.
 
 How do I get colors?
-====================
+--------------------
 
 If you are using **PyPy**, you can stop reading now, as `fancycompleter`
 will work out of the box.
@@ -117,7 +116,7 @@ installed. Your only option to get colors is to use a patched
 `readline`, as explained below.
 
 I really want to use readline
-=============================
+-----------------------------
 
 This method is not really recommended, but if you really want, you can
 use use a patched readline: you can find the patches in the `misc/`
@@ -151,7 +150,7 @@ is
 (remind that you need to put a dot in front of the filename!).
 
 Customization
-=============
+-------------
 
 To customize the configuration of fancycompleter, you need to put a file
 named `.fancycompleterrc.py` in your home directory. The file must
@@ -159,7 +158,7 @@ contain a class named `Config` inheriting from `DefaultConfig` and
 overridding the desired values.
 
 What is really going on?
-========================
+------------------------
 
 The default and preferred way to get colors is to use `pyrepl`. However,
 there is no way to tell CPython to use `pyrepl` instead of the built-in
