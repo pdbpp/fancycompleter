@@ -58,7 +58,7 @@ add those two lines at the end of your
 [PYTHONSTARTUP](http://docs.python.org/using/cmdline.html#envvar-PYTHONSTARTUP)
 script.
 
-If you do **not** have a [PYTHONSTARTUP\_]{.title-ref} script, the
+If you do **not** have a `PYTHONSTARTUP` script, the
 following command will create one for you in `~/python_startup.py`:
 
     $ python -m fancycompleter install
