@@ -27,12 +27,14 @@ def test_config(tmphome, capsys):
     assert err == ""
 
     # Exception when instantiating Config.
-    tmphome.ensure(MyCfg.config_filename)
+    p = tmphome.ensure(MyCfg.config_filename)
     cfgfile.write("def Config(): raise Exception('my_exc')")
     assert isinstance(cfg.get_config(None), DefaultCfg)
     out, err = capsys.readouterr()
     assert out == ""
-    assert err == "** error when getting Config from ~/.mycfg: my_exc **\n"
+    assert err == (
+        "** error when setting up Config from ~/.mycfg: my_exc (%s:1) **\n" % p
+    )
 
     # Error during execfile.
     tmphome.ensure(MyCfg.config_filename)

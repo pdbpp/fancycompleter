@@ -208,9 +208,14 @@ class ConfigurableClass:
         try:
             return Config()
         except Exception as exc:
-            sys.stderr.write(
-                "** error when getting Config from %s: %s **\n" % (filename, exc)
-            )
+            err = "error when setting up Config from %s: %s" % (filename, exc)
+            tb = sys.exc_info()[2]
+            if tb and tb.tb_next:
+                tb = tb.tb_next
+                err_fname = tb.tb_frame.f_code.co_filename
+                err_lnum = tb.tb_lineno
+                err += " (%s:%d)" % (err_fname, err_lnum,)
+            sys.stderr.write("** %s **\n" % err)
         return self.DefaultConfig()
 
 
