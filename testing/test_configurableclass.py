@@ -29,7 +29,7 @@ def test_config(tmphome, capsys):
     assert err == ""
 
     # Exception when instantiating Config.
-    p = os.path.normcase(str(tmphome.ensure(MyCfg.config_filename)))
+    p = str(tmphome.ensure(MyCfg.config_filename))
     cfgfile.write("def Config(): raise Exception('my_exc')")
     assert isinstance(cfg.get_config(None), DefaultCfg)
     out, err = capsys.readouterr()
