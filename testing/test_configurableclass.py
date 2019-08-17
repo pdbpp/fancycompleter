@@ -34,7 +34,7 @@ def test_config(tmphome, capsys):
     out, err = capsys.readouterr()
     assert out == ""
     assert err == (
-        "** error when setting up Config from ~/.mycfg: my_exc (%s:1) **\n" % p
+        "XXX** error when setting up Config from ~/.mycfg: my_exc (%s:1) **\n" % p
     )
     print("passed first", file=capsys._capture.out._old)
 
