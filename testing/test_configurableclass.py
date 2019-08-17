@@ -1,3 +1,5 @@
+import os
+
 from fancycompleter import ConfigurableClass
 
 
@@ -27,20 +29,17 @@ def test_config(tmphome, capsys):
     assert err == ""
 
     # Exception when instantiating Config.
-    p = tmphome.ensure(MyCfg.config_filename)
-    print(p, file=capsys._capture.out._old)
+    p = os.path.normcase(str(tmphome.ensure(MyCfg.config_filename)))
     cfgfile.write("def Config(): raise Exception('my_exc')")
     assert isinstance(cfg.get_config(None), DefaultCfg)
     out, err = capsys.readouterr()
     assert out == ""
     assert err == (
-        "XXX** error when setting up Config from ~/.mycfg: my_exc (%s:1) **\n" % p
+        "** error when setting up Config from ~/.mycfg: my_exc (%s:1) **\n" % p
     )
-    print("passed first", file=capsys._capture.out._old)
 
     # Error during execfile.
-    config_filename = tmphome.ensure(MyCfg.config_filename)
-    print("config_filename:", config_filename, file=capsys._capture.out._old)
+    tmphome.ensure(MyCfg.config_filename)
     cfgfile.write("raise Exception('my_execfile_exc')")
     assert isinstance(cfg.get_config(None), DefaultCfg)
     out, err = capsys.readouterr()
