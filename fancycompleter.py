@@ -189,7 +189,7 @@ class ConfigurableClass:
             return Config()
         # try to load config from the ~/filename file
         filename = '~/' + self.config_filename
-        rcfile = os.path.expanduser(filename)
+        rcfile = os.path.normpath(os.path.expanduser(filename))
         if not os.path.exists(rcfile):
             return self.DefaultConfig()
 
