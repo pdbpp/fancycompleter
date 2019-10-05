@@ -35,7 +35,7 @@ def test_complete_attribute_prefix():
         __attr__attr = 3
     compl = Completer({'a': C}, ConfigForTest)
     assert compl.attr_matches('a.') == ['attr', 'mro']
-    assert compl.attr_matches('a._') == ['_C__attr__attr', '_attr']
+    assert compl.attr_matches('a._') == ['_C__attr__attr', '_attr', ' ']
     matches = compl.attr_matches('a.__')
     assert 'a.__class__' not in matches
     assert '__class__' in matches
@@ -105,7 +105,7 @@ def test_autocomplete():
     # automatically insert the common prefix (which will the the ANSI escape
     # sequence if we use colors)
     matches = compl.attr_matches('A.a')
-    assert sorted(matches) == ['aaa', 'abc_1', 'abc_2', 'abc_3']
+    assert sorted(matches) == [' ', 'aaa', 'abc_1', 'abc_2', 'abc_3']
     #
     # IF there is an actual common prefix, we return just it, so that readline
     # will insert it into place
@@ -116,7 +116,7 @@ def test_autocomplete():
     # for this common prefix. Agai, we insert a spurious space to prevent the
     # automatic completion of ANSI sequences
     matches = compl.attr_matches('A.abc_')
-    assert sorted(matches) == ['abc_1', 'abc_2', 'abc_3']
+    assert sorted(matches) == [' ', 'abc_1', 'abc_2', 'abc_3']
 
 
 def test_complete_exception():
