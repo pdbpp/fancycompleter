@@ -82,6 +82,18 @@ def test_complete_global():
     assert compl.global_matches('foobaz') == ['foobazzz']
 
 
+def test_complete_global_colored():
+    compl = Completer({'foobar': 1, 'foobazzz': 2}, ColorConfig)
+    assert compl.global_matches('foo') == ['fooba']
+    matches = compl.global_matches('fooba')
+    assert set(matches) == {
+        ' ',
+        '\x1b[001;00m\x1b[00mfoobazzz\x1b[00m',
+        '\x1b[000;00m\x1b[00mfoobar\x1b[00m',
+    }
+    assert compl.global_matches('foobaz') == ['foobazzz']
+
+
 def test_complete_with_indexer():
     compl = Completer({'lst': [None, 2, 3]}, ConfigForTest)
     assert compl.attr_matches('lst[0].') == ['lst[0].__']
