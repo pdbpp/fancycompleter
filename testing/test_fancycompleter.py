@@ -35,7 +35,7 @@ def test_complete_attribute_prefix():
         __attr__attr = 3
     compl = Completer({'a': C}, ConfigForTest)
     assert compl.attr_matches('a.') == ['attr', 'mro']
-    assert compl.attr_matches('a._') == ['_C__attr__attr', '_attr']
+    assert compl.attr_matches('a._') == ['_C__attr__attr', '_attr', ' ']
     matches = compl.attr_matches('a.__')
     assert 'a.__class__' not in matches
     assert '__class__' in matches
@@ -82,6 +82,18 @@ def test_complete_global():
     assert compl.global_matches('foobaz') == ['foobazzz']
 
 
+def test_complete_global_colored():
+    compl = Completer({'foobar': 1, 'foobazzz': 2}, ColorConfig)
+    assert compl.global_matches('foo') == ['fooba']
+    matches = compl.global_matches('fooba')
+    assert set(matches) == {
+        ' ',
+        '\x1b[001;00m\x1b[00mfoobazzz\x1b[00m',
+        '\x1b[000;00m\x1b[00mfoobar\x1b[00m',
+    }
+    assert compl.global_matches('foobaz') == ['foobazzz']
+
+
 def test_complete_with_indexer():
     compl = Completer({'lst': [None, 2, 3]}, ConfigForTest)
     assert compl.attr_matches('lst[0].') == ['lst[0].__']
@@ -105,7 +117,7 @@ def test_autocomplete():
     # automatically insert the common prefix (which will the the ANSI escape
     # sequence if we use colors)
     matches = compl.attr_matches('A.a')
-    assert sorted(matches) == ['aaa', 'abc_1', 'abc_2', 'abc_3']
+    assert sorted(matches) == [' ', 'aaa', 'abc_1', 'abc_2', 'abc_3']
     #
     # IF there is an actual common prefix, we return just it, so that readline
     # will insert it into place
@@ -116,7 +128,7 @@ def test_autocomplete():
     # for this common prefix. Agai, we insert a spurious space to prevent the
     # automatic completion of ANSI sequences
     matches = compl.attr_matches('A.abc_')
-    assert sorted(matches) == ['abc_1', 'abc_2', 'abc_3']
+    assert sorted(matches) == [' ', 'abc_1', 'abc_2', 'abc_3']
 
 
 def test_complete_exception():

@@ -279,7 +279,9 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
                 except Exception:
                     # Skip e.g. SyntaxError with "elif".
                     pass
-        return self.color_matches(names, values)
+        if self.config.use_colors:
+            return self.color_matches(names, values)
+        return names
 
     def attr_matches(self, text):
         expr, attr = text.rsplit('.', 1)
@@ -331,6 +333,9 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
             else:
                 noprefix = None
 
+        if not names:
+            return []
+
         if len(names) == 1:
             return ['%s.%s' % (expr, names[0])]  # only option, no coloring.
 
@@ -338,12 +343,14 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
         if prefix and prefix != attr:
             return ['%s.%s' % (expr, prefix)]  # autocomplete prefix
 
-        return self.color_matches(names, values)
+        if self.config.use_colors:
+            return self.color_matches(names, values)
+
+        if prefix:
+            names += [' ']
+        return names
 
     def color_matches(self, names, values):
-        if not self.config.use_colors or not names:
-            return names
-
         matches = [self.color_for_obj(i, name, obj)
                    for i, name, obj
                    in izip(count(), names, values)]
