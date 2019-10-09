@@ -108,7 +108,6 @@ class DefaultConfig:
 
     color_by_type = {
         types.BuiltinMethodType: Color.turquoise,
-        types.BuiltinMethodType: Color.turquoise,
         types.MethodType: Color.turquoise,
         type((42).__add__): Color.turquoise,
         type(int.__add__): Color.turquoise,

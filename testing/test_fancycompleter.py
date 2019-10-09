@@ -8,7 +8,6 @@ class ConfigForTest(DefaultConfig):
 
 class ColorConfig(DefaultConfig):
     use_colors = True
-    color_by_type = {type: '31'}
 
 
 def test_commonprefix():
@@ -49,12 +48,14 @@ def test_complete_attribute_colored():
     compl = Completer({'a': 42}, ColorConfig)
     matches = compl.attr_matches('a.__')
     assert len(matches) > 2
-    expected_part = Color.set('31', '__class__')
+    expected_color = compl.config.color_by_type.get(type(compl.__class__))
+    assert expected_color == '35;01'
+    expected_part = Color.set(expected_color, '__class__')
     for match in matches:
         if expected_part in match:
             break
     else:
-        assert False
+        assert False, matches
     assert ' ' in matches
 
 
@@ -88,8 +89,8 @@ def test_complete_global_colored():
     matches = compl.global_matches('fooba')
     assert set(matches) == {
         ' ',
-        '\x1b[001;00m\x1b[00mfoobazzz\x1b[00m',
-        '\x1b[000;00m\x1b[00mfoobar\x1b[00m',
+        '\x1b[001;00m\x1b[33;01mfoobazzz\x1b[00m',
+        '\x1b[000;00m\x1b[33;01mfoobar\x1b[00m',
     }
     assert compl.global_matches('foobaz') == ['foobazzz']
 
