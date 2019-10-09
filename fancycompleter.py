@@ -283,7 +283,7 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
                 except Exception:
                     # Skip e.g. SyntaxError with "elif".
                     pass
-        if self.config.use_colors:
+        if self.config.use_colors and names:
             return self.color_matches(names, values)
         return names
 
