@@ -128,6 +128,11 @@ class DefaultConfig:
         complex: Color.yellow,
         bool: Color.yellow,
     }
+    # Fallback to look up colors by `isinstance` when not matched
+    # via color_by_type.
+    color_for_isinstance = [
+        ((BaseException,), Color.red),
+    ]
 
     def find_pyrepl(self):
         try:
@@ -275,14 +280,14 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
         names.sort()
         values = []
         for name in names:
-            if name in keyword.kwlist:
+            clean_name = name.rstrip(': ')
+            if clean_name in keyword.kwlist:
                 values.append(None)
             else:
                 try:
                     values.append(eval(name, self.namespace))
-                except Exception:
-                    # Skip e.g. SyntaxError with "elif".
-                    pass
+                except Exception as exc:
+                    values.append(exc)
         if self.config.use_colors and names:
             return self.color_matches(names, values)
         return names
@@ -364,7 +369,14 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
 
     def color_for_obj(self, i, name, value):
         t = type(value)
-        color = self.config.color_by_type.get(t, '00')
+        color = self.config.color_by_type.get(t, None)
+        if color is None:
+            for x, _color in self.config.color_for_isinstance:
+                if isinstance(value, x):
+                    color = _color
+                    break
+            else:
+                color = '00'
         # hack: prepend an (increasing) fake escape sequence,
         # so that readline can sort the matches correctly.
         return '\x1b[%03d;00m' % i + Color.set(color, name)

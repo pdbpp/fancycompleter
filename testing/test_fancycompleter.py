@@ -1,5 +1,7 @@
-from fancycompleter import (DefaultConfig, Completer, Color, Installer,
-                            commonprefix, LazyVersion)
+import sys
+
+from fancycompleter import (Color, Completer, DefaultConfig, Installer,
+                            LazyVersion, commonprefix)
 
 
 class ConfigForTest(DefaultConfig):
@@ -95,6 +97,30 @@ def test_complete_global_colored():
     }
     assert compl.global_matches('foobaz') == ['foobazzz']
     assert compl.global_matches('nothing') == []
+
+
+def test_complete_global_colored_exception():
+    compl = Completer({'tryme': ValueError()}, ColorConfig)
+    if sys.version_info >= (3, 6):
+        assert compl.global_matches('try') == [
+            '\x1b[000;00m\x1b[37mtry:\x1b[00m',
+            '\x1b[001;00m\x1b[31;01mtryme\x1b[00m',
+            ' '
+        ]
+    else:
+        assert compl.global_matches('try') == [
+            '\x1b[000;00m\x1b[37mtry\x1b[00m',
+            '\x1b[001;00m\x1b[31;01mtryme\x1b[00m',
+            ' '
+        ]
+
+
+def test_color_for_obj(monkeypatch):
+    class Config(ColorConfig):
+        color_by_type = {}
+
+    compl = Completer({}, Config)
+    assert compl.color_for_obj(1, "foo", "bar") == "\x1b[001;00m\x1b[00mfoo\x1b[00m"
 
 
 def test_complete_with_indexer():
