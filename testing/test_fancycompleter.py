@@ -115,6 +115,24 @@ def test_complete_global_colored_exception():
         ]
 
 
+def test_complete_global_exception(monkeypatch):
+    import rlcompleter
+
+    def rlcompleter_global_matches(self, text):
+        return ['trigger_exception!', 'nameerror', 'valid']
+
+    monkeypatch.setattr(rlcompleter.Completer, 'global_matches',
+                        rlcompleter_global_matches)
+
+    compl = Completer({'valid': 42}, ColorConfig)
+    assert compl.global_matches("") == [
+        "\x1b[000;00m\x1b[31;01mnameerror\x1b[00m",
+        "\x1b[001;00m\x1b[31;01mtrigger_exception!\x1b[00m",
+        "\x1b[002;00m\x1b[33;01mvalid\x1b[00m",
+        " ",
+    ]
+
+
 def test_color_for_obj(monkeypatch):
     class Config(ColorConfig):
         color_by_type = {}
