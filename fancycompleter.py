@@ -130,7 +130,7 @@ class DefaultConfig:
     }
     # Fallback to look up colors by `isinstance` when not matched
     # via color_by_type.
-    color_for_isinstance = [
+    color_by_baseclass = [
         ((BaseException,), Color.red),
     ]
 
@@ -371,7 +371,7 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
         t = type(value)
         color = self.config.color_by_type.get(t, None)
         if color is None:
-            for x, _color in self.config.color_for_isinstance:
+            for x, _color in self.config.color_by_baseclass:
                 if isinstance(value, x):
                     color = _color
                     break
