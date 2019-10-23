@@ -81,6 +81,7 @@ def test_complete_global():
     matches = compl.global_matches('fooba')
     assert set(matches) == set(['foobar', 'foobazzz'])
     assert compl.global_matches('foobaz') == ['foobazzz']
+    assert compl.global_matches('nothing') == []
 
 
 def test_complete_global_colored():
@@ -93,6 +94,7 @@ def test_complete_global_colored():
         '\x1b[000;00m\x1b[33;01mfoobar\x1b[00m',
     }
     assert compl.global_matches('foobaz') == ['foobazzz']
+    assert compl.global_matches('nothing') == []
 
 
 def test_complete_with_indexer():
