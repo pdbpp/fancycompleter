@@ -56,7 +56,8 @@ script:
 after_script:
   - |
     if [[ "${TOXENV%-coverage}" != "$TOXENV" ]]; then
-      bash <(curl -S -L --connect-timeout 5 --retry 6 -s https://codecov.io/bash) -Z -X gcov -X coveragepy -X search -X xcode -X gcovout -X fix -f coverage.xml -n $TOXENV -F "${TRAVIS_OS_NAME}"
+      curl --version
+      bash <(wget https://codecov.io/bash -O -) -Z -X gcov -X coveragepy -X search -X xcode -X gcovout -X fix -f coverage.xml -n $TOXENV -F "${TRAVIS_OS_NAME}"
     fi
 
 # Only master and releases.  PRs are used otherwise.
