@@ -197,7 +197,10 @@ class ConfigurableClass:
         try:
             my_execfile(rcfile, mydict)
         except Exception as exc:
-            sys.stderr.write("** error when importing %s: %s **\n" % (filename, exc))
+            import traceback
+
+            sys.stderr.write("** error when importing %s: %r **\n" % (filename, exc))
+            traceback.print_tb(exc.__traceback__)
             return self.DefaultConfig()
 
         try:

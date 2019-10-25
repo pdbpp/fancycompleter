@@ -3,7 +3,7 @@ import os
 from fancycompleter import ConfigurableClass
 
 
-def test_config(tmphome, capsys):
+def test_config(tmphome, capsys, LineMatcher):
     class DefaultCfg:
         default = 42
 
@@ -44,4 +44,12 @@ def test_config(tmphome, capsys):
     assert isinstance(cfg.get_config(None), DefaultCfg)
     out, err = capsys.readouterr()
     assert out == ""
-    assert err == "** error when importing ~/.mycfg: my_execfile_exc **\n"
+    LineMatcher(err.splitlines()).fnmatch_lines([
+        "** error when importing ~/.mycfg: Exception('my_execfile_exc') **",
+        '  File */fancycompleter.py", line *, in get_config',
+        '    my_execfile(rcfile, mydict)',
+        '  File */fancycompleter.py", line *, in my_execfile',
+        '    exec(code, mydict)',
+        '  File "*/test_config0/.mycfg", line 1, in <module>',
+        "    raise Exception('my_execfile_exc')",
+    ])
