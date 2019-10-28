@@ -200,7 +200,7 @@ class ConfigurableClass:
             import traceback
 
             sys.stderr.write("** error when importing %s: %r **\n" % (filename, exc))
-            traceback.print_tb(exc.__traceback__)
+            traceback.print_tb(sys.exc_info()[2])
             return self.DefaultConfig()
 
         try:
