@@ -5,6 +5,12 @@ env:
   global:
     - PYTEST_ADDOPTS="-vv --cov --cov-report=xml"
 
+stages:
+  - name: test
+    if: tag IS NOT present
+  - name: release
+    if: tag IS present
+
 jobs:
   include:
     - os: windows
@@ -43,6 +49,21 @@ jobs:
 
     - python: '3.7'
       env: TOXENV=checkqa
+
+    - stage: release
+      script: skip
+      install: skip
+      after_success: true
+      env:
+      deploy:
+        provider: pypi
+        distributions: sdist bdist_wheel
+        user: __token__
+        password:
+          secure: "gucshhwm48kCIWThlbqhE08HIdjHgZtOSBKDgxAS57mR+lDVVtX6tdoitYSNPugMuYCgA6WEtg3Ikd+clbUTv7lfs5gDBlHrgjRO6qDDJ1PWgcxhSJ+nctaOEhHN5CVXg7wsGYtavM99sJYsu3RZGPg0IGjT/Z1792gNCBIMmE/j4r2G6tQZ+FdHCVtT2YQ74bLFV1BrnZa579NTuSQ8QhFz8Pccd0XpSSzQ/T1xRUMr5FZj9ecg4CRob+dKIIZWfExeJN0rv1UgqR6/D3qO7hoDwKYCNikv8VuB04LB6c+6Pc9yAGjSieGTKl7rGc6jQCvevCvSjitITGlhbjUnIT9br8B7cywUiZ+3rRJ7W2phxlHbGKxldA8tQhyYPqjr0EfO2gYlRoSikPNY6m9iM9igP67osnyih52aUjssoX9PNwuzwwEume2cnKRb3oyzWoqboH2dj/eJFaP1hi9w+56WDh/+7jRpEiBQ3G8Ph45BvxvwtPikedTZgShTqEYQLp1JEZFdQZD35dCMAnmVAogbQjLgGTjQ1T1pnK1tsu1Hu+QOphTDVW7MyRiQ5dj6E0/Hah0l6tjlsFT/QfjjMO6f1bBzTktBlfRheHPrPervulHVwhZavcNJ4vE6mdObSWBaGHaI8imNMnSautlbn/yHo+UxfVnjRGcM5zpLAMc="
+        on:
+          tags: true
+          repo: pdbpp/fancycompleter
 
 install:
   - pip install tox==3.12.1
