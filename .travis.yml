@@ -60,7 +60,7 @@ jobs:
         distributions: sdist bdist_wheel
         user: __token__
         password:
-          secure: "gucshhwm48kCIWThlbqhE08HIdjHgZtOSBKDgxAS57mR+lDVVtX6tdoitYSNPugMuYCgA6WEtg3Ikd+clbUTv7lfs5gDBlHrgjRO6qDDJ1PWgcxhSJ+nctaOEhHN5CVXg7wsGYtavM99sJYsu3RZGPg0IGjT/Z1792gNCBIMmE/j4r2G6tQZ+FdHCVtT2YQ74bLFV1BrnZa579NTuSQ8QhFz8Pccd0XpSSzQ/T1xRUMr5FZj9ecg4CRob+dKIIZWfExeJN0rv1UgqR6/D3qO7hoDwKYCNikv8VuB04LB6c+6Pc9yAGjSieGTKl7rGc6jQCvevCvSjitITGlhbjUnIT9br8B7cywUiZ+3rRJ7W2phxlHbGKxldA8tQhyYPqjr0EfO2gYlRoSikPNY6m9iM9igP67osnyih52aUjssoX9PNwuzwwEume2cnKRb3oyzWoqboH2dj/eJFaP1hi9w+56WDh/+7jRpEiBQ3G8Ph45BvxvwtPikedTZgShTqEYQLp1JEZFdQZD35dCMAnmVAogbQjLgGTjQ1T1pnK1tsu1Hu+QOphTDVW7MyRiQ5dj6E0/Hah0l6tjlsFT/QfjjMO6f1bBzTktBlfRheHPrPervulHVwhZavcNJ4vE6mdObSWBaGHaI8imNMnSautlbn/yHo+UxfVnjRGcM5zpLAMc="
+          secure: "GCyMei2qFzd9AN0EmT9AGqO0zQFtab8Yff4O9zmpDn34hk7TRhQdAHqPXTj0GovYjN783y31jQdVPbEsFiXUAtEu6rfOBwTtVvNCHGVdDQ0nhZFZVwYD3NfhaV1UCq/ahs5AdUEARAPbR8lviH4PMByrMs3x+ul+bHfZ70QlD1xvC/wlkZ+C/FWc5WiKbkqM5W/CUJoOnX7C5Cx/cI/VZI8X3N77t1J7fW4CEvk3nvU9CW8gDCcuJhq4Hr4oW85PsSCcJagwo1im3WSK+5rNTFlihoE1kGYtrDlWFrNFruAwobk9LSjk+GKTZqD6PFxilON/hiKavxHNYEBwwnfvpDTK87lQHU1LuLOjNMDn8pPOj8uvvKrx9y2BgtFcJzEq9oudtJOKYcxoVpLm/tmqB4QzlTWpOKXk769Sk7lZM9n+psu6wtAd1X8GH5qFon5z0YnNmaNFew5bKs3R/L3Eav1OyskA0zi4f/h8s98apnY4AGX7ul/xxoJhp3OXiSN75fMI6SUiNZLFgRUmFNqJ6pzCqHDbV0y60EeH+5BBLIdKc/D+YsuqDZYAjkN4ze6JVzGtxSSK9tuZyKJJ7zPXT1qdZxXRF0XOHRcVTxl+tNBncCmVvrJmf8QvQ6FteShZqTu3qfWWAubCOGVrxr0aVVZkYR6izNrAsp+J2/ETs5Q="
         on:
           tags: true
           repo: pdbpp/fancycompleter
@@ -86,4 +86,4 @@ after_script:
 branches:
   only:
     - master
-    - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
+    - /^\d+\.\d+(\.\d+)?(-\S*)?$/
