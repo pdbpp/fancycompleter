@@ -26,8 +26,8 @@ Other features
 --------------
 
 -   To save space on screen, `fancycompleter` only shows the characters
-    \"after the dot\". By contrast, in the example above `rlcompleter`
-    shows everything prepended by \"`sys.`\".
+    "after the dot". By contrast, in the example above `rlcompleter`
+    shows everything prepended by `"sys."`.
 -   If we press `<TAB>` at the beginning of the line, a real tab
     character is inserted, instead of trying to complete. This is useful
     when typing function bodies or multi-line statements at the prompt.
@@ -69,7 +69,7 @@ variable. On other systems, you need to add the proper command in
 
 **Note**: depending on your particular system, `interact` might need to
 play dirty tricks in order to display colors, although everything should
-\"just work™\". In particular, the call to `interact` should be the last
+"just work". In particular, the call to `interact` should be the last
 line in the startup file, else the next lines might not be executed. See
 section [What is really going on?](#what-is-really-going-on) for
 details.
