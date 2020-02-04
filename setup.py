@@ -28,7 +28,7 @@ setup(
         "Topic :: Utilities",
         ],
     install_requires=[
-        "pyrepl @ git+https://github.com/pdbpp/pyrepl@master#egg=pyrepl",
+        "pyrepl>=0.8.2",
         "pyreadline;platform_system=='Windows'",
     ]
 )
