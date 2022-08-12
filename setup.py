@@ -29,6 +29,6 @@ setup(
         ],
     install_requires=[
         "pyrepl @ git+https://github.com/pdbpp/pyrepl@master#egg=pyrepl",
-        "pyreadline;platform_system=='Windows'",
+        "pyreadline3;platform_system=='Windows'",
     ]
 )

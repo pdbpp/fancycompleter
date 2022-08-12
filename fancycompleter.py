@@ -150,8 +150,8 @@ class DefaultConfig:
     def find_pyreadline(self):
         try:
             import readline
-            import pyreadline  # noqa: F401  # XXX: needed really?
-            from pyreadline.modes import basemode
+            import pyreadline3  # noqa: F401  # XXX: needed really?
+            from pyreadline3.modes import basemode
         except ImportError:
             return None
         if hasattr(basemode, 'stripcolor'):
