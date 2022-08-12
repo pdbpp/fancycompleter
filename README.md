@@ -101,8 +101,8 @@ By default, `fancycompleter` tries to use `pyrepl` if it finds it. To
 get colors you need a recent version, \>= 0.8.2.
 
 Starting from version 0.6.1, `fancycompleter` works also on **Windows**,
-relying on [pyreadline](https://pypi.python.org/pypi/pyreadline). At the
-moment of writing, the latest version of `pyreadline` is 2.1, which does
+relying on [pyreadline3](https://pypi.python.org/pypi/pyreadline3). At the
+moment of writing, the latest version of `pyreadline3` is 2.1, which does
 **not** support colored completions; here is the [pull
 request](https://github.com/pyreadline/pyreadline/pull/48) which adds
 support for them. To enable colors, you can install `pyreadline` from
