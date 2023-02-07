@@ -12,7 +12,7 @@ the stdlib\'s
 Its best feature is that the completions are displayed in different
 colors, depending on their type:
 
-![image](http://bitbucket.org/antocuni/fancycompleter/raw/5bf506e05ce7/screenshot.png)
+![image](https://user-images.githubusercontent.com/9417531/217352395-abbb900f-c747-4535-a37f-d2edfc263559.png)
 
 In the image above, strings are shown in green, functions in blue,
 integers and boolean in yellows, `None` in gray, types and classes in
