@@ -8,6 +8,7 @@ import rlcompleter
 import sys
 import types
 from itertools import count
+from typing import Optional
 
 izip = zip
 
@@ -90,12 +91,10 @@ class DefaultConfig:
         type(str.replace): Color.turquoise,
         types.FunctionType: Color.blue,
         types.BuiltinFunctionType: Color.blue,
-        ClassType: Color.fuchsia,
         type: Color.fuchsia,
         types.ModuleType: Color.teal,
         type(None): Color.lightgray,
         str: Color.green,
-        unicode: Color.green,
         int: Color.yellow,
         float: Color.yellow,
         complex: Color.yellow,
@@ -380,10 +379,8 @@ def has_leopard_libedit(config):
     return config.readline.__doc__ and "libedit" in config.readline.__doc__
 
 
-def setup():
-    """
-    Install fancycompleter as the default completer for readline.
-    """
+def setup() -> Completer:
+    """Install fancycompleter as the default completer for readline."""
     completer = Completer()
     readline = completer.config.readline
     if has_leopard_libedit(completer.config):
@@ -404,15 +401,13 @@ def interact_pyrepl():
     run_multiline_interactive_console()
 
 
-def setup_history(completer, persist_history):
+def setup_history(completer, persist_history: str):
     import atexit
 
     readline = completer.config.readline
-    #
-    if isinstance(persist_history, (str, unicode)):
-        filename = persist_history
-    else:
-        filename = "~/.history.py"
+
+    filename = persist_history if isinstance(persist_history, str) else "~/.history.py"
+
     filename = os.path.expanduser(filename)
     if os.path.isfile(filename):
         readline.read_history_file(filename)
@@ -423,7 +418,7 @@ def setup_history(completer, persist_history):
     atexit.register(save_history)
 
 
-def interact(persist_history=None):
+def interact(persist_history: Optional[str] = None):
     """
     Main entry point for fancycompleter: run an interactive Python session
     after installing fancycompleter.
@@ -446,7 +441,7 @@ def interact(persist_history=None):
     import sys
 
     completer = setup()
-    if persist_history:
+    if persist_history is not None:
         setup_history(completer, persist_history)
     if completer.config.using_pyrepl and "__pypy__" not in sys.builtin_module_names:
         # if we are on PyPy, we don't need to run a "fake" interpeter, as the
@@ -456,9 +451,7 @@ def interact(persist_history=None):
 
 
 class Installer:
-    """
-    Helper to install fancycompleter in PYTHONSTARTUP
-    """
+    """Helper to install fancycompleter in PYTHONSTARTUP"""
 
     def __init__(self, basepath, force):
         fname = os.path.join(basepath, "python_startup.py")
