@@ -1,37 +1,18 @@
 """
 fancycompleter: colorful TAB completion for Python prompt
 """
-from __future__ import print_function, with_statement
 
+import contextlib
 import os.path
 import rlcompleter
 import sys
 import types
 from itertools import count
 
-PY3K = sys.version_info[0] >= 3
-
-# python3 compatibility
-# ---------------------
-try:
-    from itertools import izip
-except ImportError:
-    izip = zip
-
-try:
-    from types import ClassType
-except ImportError:
-    ClassType = type
-
-try:
-    unicode
-except NameError:
-    unicode = str
-
-# ----------------------
+izip = zip
 
 
-class LazyVersion(object):
+class LazyVersion:
     def __init__(self, pkg):
         self.pkg = pkg
         self.__version = None
@@ -89,11 +70,9 @@ class Color:
 
     @classmethod
     def set(cls, color, string):
-        try:
+        with contextlib.suppress(AttributeError):
             color = getattr(cls, color)
-        except AttributeError:
-            pass
-        return "\x1b[%sm%s\x1b[00m" % (color, string)
+        return f"\x1b[{color}m{string}\x1b[00m"
 
 
 class DefaultConfig:
@@ -200,7 +179,7 @@ class ConfigurableClass:
         except Exception as exc:
             import traceback
 
-            sys.stderr.write("** error when importing %s: %r **\n" % (filename, exc))
+            sys.stderr.write(f"** error when importing {filename}: {exc!r} **\n")
             traceback.print_tb(sys.exc_info()[2])
             return self.DefaultConfig()
 
@@ -212,7 +191,7 @@ class ConfigurableClass:
         try:
             return Config()
         except Exception as exc:
-            err = "error when setting up Config from %s: %s" % (filename, exc)
+            err = f"error when setting up Config from {filename}: {exc}"
             tb = sys.exc_info()[2]
             if tb and tb.tb_next:
                 tb = tb.tb_next
@@ -329,30 +308,21 @@ class Completer(rlcompleter.Completer, ConfigurableClass):
                     except Exception:
                         val = None  # Include even if attribute not set
 
-                    if not PY3K and isinstance(word, unicode):
-                        # this is needed because pyrepl doesn't like unicode
-                        # completions: as soon as it finds something which is not str,
-                        # it stops.
-                        word = word.encode("utf-8")
-
                     names.append(word)
                     values.append(val)
             if names or not noprefix:
                 break
-            if noprefix == "_":
-                noprefix = "__"
-            else:
-                noprefix = None
+            noprefix = "__" if noprefix == "_" else None
 
         if not names:
             return []
 
         if len(names) == 1:
-            return ["%s.%s" % (expr, names[0])]  # only option, no coloring.
+            return [f"{expr}.{names[0]}"]  # only option, no coloring.
 
         prefix = commonprefix(names)
         if prefix and prefix != attr:
-            return ["%s.%s" % (expr, prefix)]  # autocomplete prefix
+            return [f"{expr}.{prefix}"]  # autocomplete prefix
 
         if self.config.use_colors:
             return self.color_matches(names, values)
@@ -485,7 +455,7 @@ def interact(persist_history=None):
         sys.exit()
 
 
-class Installer(object):
+class Installer:
     """
     Helper to install fancycompleter in PYTHONSTARTUP
     """
